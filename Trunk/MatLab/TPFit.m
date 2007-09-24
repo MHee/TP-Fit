@@ -21,10 +21,10 @@ TPFit_Window;
 function CheckTPFitInstallation
 BasePath=fileparts(which(mfilename));
 ScriptPath=fullfile(BasePath,'TP-Fit');
-ModelPath=fullfile(BasePath,'RefModels');
+%ModelPath=fullfile(BasePath,'RefModels');
 
 %OldBasePath=fileparts(which('APCT_TModels.mat'))
-OldModelPath=fileparts(which('APCT_TModels.mat'))
+%OldModelPath=fileparts(which('APCT_TModels.mat'))
 OldScriptPath=fileparts(which('TPFit_VersionInfo'))
 if ~isempty(OldScriptPath)
     % TP-Fit already on path
@@ -38,6 +38,6 @@ end
 
 addpath(BasePath);
 addpath(ScriptPath);
-addpath(ModelPath);
+%addpath(ModelPath);
 
 

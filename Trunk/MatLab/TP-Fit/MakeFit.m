@@ -3,9 +3,10 @@ function [Res,Data]=MakeFit(Data,k,rc,M)
 if exist('M','var')
     RefDat=GetRefDecay(k,rc,'M',M);
 else
-    RefDat=GetRefDecay(k,rc,'ModelType',Data.ModelType);
+    [RefDat,M]=GetRefDecay(k,rc,'ModelType',Data.ModelType,...
+        'NearestWarning',false); 
 end
-OptimRes=MakeOptimFit(Data,k,rc);
+OptimRes=MakeOptimFit(Data,k,rc,M);
 
 tSfts=unique([-50:2.5:Data.Picks.Window(1) 0 Data.Picks.Window(1) OptimRes.BestSft]); %OptimRes.BestSft-20
 

@@ -1,7 +1,7 @@
 function Data=GetPicks(Data)
 if ~isfield(Data,'ModelType')
     switch Data.ImportInfo.DataType
-        case {'ANTARES','ADARA'}
+        case {'ANTARES','ADARA','TPFIT_RES'}
             Data.ModelType='APCT_T';
         case 'DVTP'
             Data.ModelType='DVTP_T';

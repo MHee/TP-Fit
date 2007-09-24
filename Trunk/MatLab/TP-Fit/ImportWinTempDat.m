@@ -1,20 +1,53 @@
-function Data=ReadWinTempDat(DatFile)
-% Reads WinTemp *.dat file and returns a Data structure which
-% contains the data in seperate fields.
-% Have a look at the end of the file for field descriptions
+function Data=ImportWinTempDat(FileName,varargin)
+% IMPORTWINTEMPDAT.M   Reads WinTemp *.dat file
+%   Reads WinTemp *.dat file and returns a Data structure which
+%   contains the data in seperate fields.
+%   Have a look at the end of the file for field descriptions
 %
-% 4.7.2002 (Poseidon 291) Martin Heesemann
+%   
+%   Example
+%       Data=ImportWinTempDat
+%
+%   See also: ImportTemperatureData
+
+%% Info
+% 4.7.2002 (Poseidon 291) Martin Heesemann (ReadWinTempDat)
 %
 % Update: 3.9.2004 (IODP 301T) Martin Heesemann
 % * Now all information of Header is included in Data -Structure
 % * OneSecond=datenum('00:00:01'); Does not work anymore since MatLab 7!
 %   Change to OneSecond=datenum('00:00:02')-datenum('00:00:01');
-% 
+%
+%   Copyright 2007  Martin Heesemann <heesema AT uni-bremen DOT de>
+
+%% Self-test
+if ~exist('FileName','var')
+    
+    [DatFile,DatPath]=uigetfile({'*.dat'},'WinTemp Data');
+    FileName=fullfile(DatPath, DatFile)
+
+    varargin={'DoPlot',true};
+end
+
+% Make sure the file exists
+if ~exist(FileName,'file');
+    warning('TPFit:FileNotFound','File %s does not exist!',FileName);
+    Data=[];
+    return
+end
+
+
+%% Define options
+Opts.DoPlot=true;
+Opts=ParseFunOpts(Opts,varargin);
+
+
+
 
 %
 % Find end of header and get header-information
 %
-fid=fopen(DatFile,'r');
+fid=fopen(FileName,'r');
 HLine=[];
 NumOfHLines=0;
 % This identifies the last line of the header
@@ -54,7 +87,7 @@ fclose(fid);
 % Found out number of header-lines to skip, now read the Data
 %
 [yyyy, mm, dd, HH, MM, SS, Raw, Res, T]=...
-    textread(DatFile,'%d %d %d %d %d %d %d %f %f','headerlines',NumOfHLines);
+    textread(FileName,'%d %d %d %d %d %d %d %f %f','headerlines',NumOfHLines);
 %
 % Organize the Data
 %
@@ -77,3 +110,18 @@ Data.TRaw=T;
 % Elapsed time in seconds after the beginning of the measurement (t=0)
 OneSec=datenum('00:00:02')-datenum('00:00:01');
 Data.t=round((Data.DateNum-Data.DateNum(1))/OneSec);
+
+if Opts.DoPlot
+    clf;
+    figure(gcf);
+    plot(Data.t, Data.TRaw,'-')
+    xlabel('t (s)');
+    ylabel('T (°C)');
+    [FPath,ODPName]=fileparts(FileName);
+    title(['APCT:' upper(ODPName) ' (WinTemp)']);
+    set(gca,...
+        'TickDir','out',...
+        'XMinorTick','on',...
+        'YMinorTick','on',...
+        'XLim',[min(Data.t) max(Data.t)]);
+end

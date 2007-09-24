@@ -65,8 +65,14 @@ guidata(hObject, handles);
 
 Settings=LoadUserSettings(handles);
 Pos=get(handles.TPFit,'Position');
-Pos(1:2)=Settings.WinPos.TPFit(1:2);
-set(handles.TPFit,'Position',Pos);
+if isfield(Settings,'WinPos')
+    Pos(1:2)=Settings.WinPos.TPFit(1:2);
+    set(handles.TPFit,'Position',Pos);
+else
+    Settings.WinPos.TPFit=get(handles.TPFit,'Position');
+    Settings.WinPaperPos=[];
+    set(handles.Load,'UserData',Settings);
+end
 
 function TPFit_Window_DeleteFcn(hObject, eventdata, handles)
 if strcmp(questdlg('Save Session before quitting?!','','Yes','No','Yes'),'Yes')
@@ -97,7 +103,7 @@ Settings=get(handles.Load,'UserData');
 Data=ImportTemperatureData('StartDir',Settings.DataDir);
 %,... 'DefaultInfo',Settings.Info
 
-if isstruct(Data)
+if (isstruct(Data) && ~isempty(Data))
     if ~isfield(Data,'Info')
         Settings.Info;
         Data=GuessMetaData(Data,'Info',Settings.Info);

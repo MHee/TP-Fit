@@ -1,5 +1,6 @@
 function PlotFitResults(varargin)
 % 
+Opts.PlotTFitRes=true;
 Opts.NSft=[];
 Opts.tSft=[];
 Opts.Figure=[];
@@ -74,8 +75,6 @@ plot(XLim,Data.Res.PartFit(NSft,2)*[1 1],'k:');
 plot(XLim,Data.Res.Fit(NSft,2)*[1 1],'ko','MarkerFaceColor',[1 .7 .7]);
 plot(XLim,Data.Res.PartFit(NSft,2)*[1 1],'.');
 
-
-
 RefDat=GetRefDecay(Data.Res.k,Data.Res.rc,...
     'ts',[0 logspace(0,4,50)],...
     'ModelType',Data.ModelType);
@@ -92,6 +91,16 @@ plot(Data.tr(Data.Picks.UsedDat(end)), Data.T(Data.Picks.UsedDat(end)),'kv','Lin
 plot(Data.tr(Data.Picks.UsedDat(Data.Res.InPartFit(1))),...
      Data.T(Data.Picks.UsedDat(Data.Res.InPartFit(1))),'kd','LineWidth',1.5);
 
+if (Opts.PlotTFitRes && isfield(Data,'OrigData') && isfield(Data.OrigData,'Model'))
+    plot(XLim,Data.OrigData.Fit.Tf*[1 1],':','Color',[1 0 0],'LineWidth',1.5);
+    plot(Data.OrigData.Model.t,...
+        Data.OrigData.Fit.b*Data.OrigData.Model.T+Data.OrigData.Fit.Tf,'r');
+    fprintf('TFit-Results (TPFit-TFit: %.3f °C)\n',...
+        Data.Res.Fit(NSft,2)-Data.OrigData.Fit.Tf);
+    TFitRes.Fit=Data.OrigData.Fit;
+    TFitRes.Seds=Data.OrigData.Props.Seds;
+    structree(TFitRes);
+end
 
 % plot(Data.tr(Data.Picks.UsedDat), Data.T(Data.Picks.UsedDat),'g.','MarkerSize',7);
 % plot(Data.tr(Data.Picks.UsedDat(Data.Res.InPartFit)),...

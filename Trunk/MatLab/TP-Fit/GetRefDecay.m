@@ -14,9 +14,11 @@ function [RefDat,M]=GetRefDecay(k,rc,varargin)
 % Default Options
 Opts.ts=[];
 Opts.Print=false;
+Opts.NSens=1; % Virtual Sensor to use
 Opts.FileName=[];
 Opts.GetT2=false; % Get second temperature (of DVTP data)
 Opts.InterpProps=false;
+Opts.NearestWarning=true;
 Opts.ModelType='APCT_T';
 Opts.M=[]; % Provide Model Matrix to speed up Process
 Opts=ParseFunOpts(Opts,varargin);
@@ -59,16 +61,16 @@ end
 
 if ( ~Opts.InterpProps || (kInTable && rcInTable) )
     % Do not interpolate thermal props
-    if ~kInTable
+    if (~kInTable && Opts.NearestWarning)
         warning('k not in model lookup table. Unsing closest!');
     end
-    if ~rcInTable
+    if (~rcInTable && Opts.NearestWarning)
         warning('rc not in model lookup table. Unsing closest!');
     end
     RefDat.k=M.ks(i);
     RefDat.rc=M.rcs(j);
     RefDat.t=M.t;
-    RefDat.T=M.T{i,j};
+    RefDat.T=M.T{i,j}(Opts.NSens,:);
     if use_T2
         RefDat.T2=M.T2{i,j};
     end
@@ -88,7 +90,7 @@ else
     end
     for i = 1:length(M.ks)
         for j= 1:length(M.rcs)
-            T_G(i,j,:)=M.T{i,j};
+            T_G(i,j,:)=M.T{i,j}(Opts.NSens,:);
             if use_T2
                 T2_G(i,j,:)=M.T2{i,j};
             end

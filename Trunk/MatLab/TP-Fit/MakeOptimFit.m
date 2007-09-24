@@ -2,7 +2,7 @@ function Res=MakeOptimFit(Data,k,rc,M)
 % WARNING Moved from standart deviation to Least Squares!!!
 
 if exist('M','var')
-    RefDat=GetRefDecay(k,rc,'M',M);
+    RefDat=GetRefDecay(k,rc,'M',M,'NearestWarning',false);
 else
     RefDat=GetRefDecay(k,rc,'ModelType',Data.ModelType);
 end

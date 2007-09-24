@@ -1,8 +1,8 @@
 function Data=ImportTemperatureData(varargin)
-%ImportTemperatureData Import data of IODP/ODP downhole temperature tools 
+%ImportTemperatureData Import data of IODP/ODP downhole temperature tools
 %
 % Data files of APCT-3 (ANTARES), older APCT tools (ADARA), and DVTP (DVTP)
-% tools are supported. 
+% tools are supported.
 % If the function is called without input parameters, the user can
 % interactively pick a file and the filetype (given in braces above) is
 % automaticly determined. The filetype can also be set by specifying a
@@ -18,8 +18,9 @@ function Data=ImportTemperatureData(varargin)
 
 % Process command-line options
 Opts.FileType=[];
-Opts.EventNo=[]; % Which Event to use in ADARA files
 Opts.StartDir='';
+Opts.EditBad=false; % Automatically open bad files in Matlab Editor
+Opts.DoPlot=false;
 [Opts, unusedOpts]=ParseFunOpts(Opts,varargin);
 if length(unusedOpts)==1
     FileName=unusedOpts{1};
@@ -27,7 +28,7 @@ end
 
 % Get the FileName
 if ~exist('FileName','var')
-    [DatFile,DatPath]=uigetfile({'*.dat;*.eng;*.mat;*.new;*.npm';'*.dat';'*.eng';'*.mat'},'Select Data or Session File',Opts.StartDir);
+    [DatFile,DatPath]=uigetfile({'*.dat;*.eng;*.mat;*.new;*.npm;*.fit';'*.dat';'*.eng';'*.mat'},'Select Data or Session File',Opts.StartDir);
     FileName=fullfile(DatPath, DatFile);
 else
     [DatPath,DatFile,ext] = fileparts(FileName);
@@ -37,7 +38,7 @@ end
 % Make sure the file exists
 if ~exist(FileName,'file');
     warning('TPFit:FileNotFound','File %s does not exist!',FileName);
-    Data=0;
+    Data=[];
     return
 end
 
@@ -46,26 +47,29 @@ end
 if strcmpi(ext,'.mat')
     load(FileName);
     if exist('Data','var')
-       if (isfield(Data,'SynthInfo') && ~isfield(Data,'TPFitInfo'))
-           % This is a plain GeTTMo model and not a Session file
-           Data.ImportInfo.DatFile=[Dummy2 ext];
-       end
-       if isfield(Data,'T')
-           % We assume that T is valid data 
-           % and that the rest is also okay ;-)
-           return
-       end
+        if (isfield(Data,'SynthInfo') && ~isfield(Data,'TPFitInfo'))
+            % This is a plain GeTTMo model and not a Session file
+            Data.ImportInfo.DatFile=[Dummy2 ext];
+        end
+        if isfield(Data,'T')
+            % We assume that T is valid data
+            % and that the rest is also okay ;-)
+            if Opts.DoPlot
+                PlotMatData(Data,FileName); %See below
+            end
+            return
+        end
     end
     warning('TPFit:NoSession',[FileName ' is not a valid session!']);
-    Data=0;
+    Data=[];
     return
 end
 
 % Check the FileType of the input data
-if ~isempty(Opts.FileType) 
+if ~isempty(Opts.FileType)
     % User has supplied file type
     FileType=Opts.FileType;
-else 
+else
     % Automaticly determine file type (ADARA, ANTARES, DVTP)
     fid=fopen(FileName);
     Line1=fgetl(fid);
@@ -80,15 +84,20 @@ else
             strncmp(Line2,...
             '" **** Adara Temperature Tool Data File Version 3.0 ****"',56))
         FileType='ADARA';
-    elseif strncmp(Line1,'origin:',6)
+    elseif (strncmp(Line1,'origin:',6) && strncmp(Line2,'string:',6))
         FileType='DVTP';
     elseif strncmp(Line3,'# LoggerIdentifier',18)
         FileType='ANTARES';
     elseif strcmpi(ext,'.npm')
         FileType='QBASIC_NEEDLE';
+    elseif strcmpi(ext,'.fit')
+        FileType='TPFIT_RES';
     else
-        warning('TPFit:UnknownFormat',['Sorry, cannot determine data type of ' FileName ]);
-        Data=0;
+        warning('TPFit:UnknownFormat','Sorry, cannot determine data type of %s !',FileName );
+        if Opts.EditBad
+            edit(FileName);
+        end
+        Data=[];
         return
     end
 end
@@ -96,16 +105,11 @@ end
 % Import Data with routines depending on FileType
 switch upper(FileType)
     case {'ADARA'}
-        if isempty(Opts.EventNo)
-            OrigData=ImportAdaraData(FileName);
-        else
-            OrigData=ImportAdaraData(FileName,Opts.EventNo);
-        end
-            
+        OrigData=ImportAdaraData(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.T;
         Data.t=OrigData.t;
     case {'ANTARES'}
-        OrigData=ReadWinTempDat(FileName);
+        OrigData=ImportWinTempDat(FileName);
         Data.T=OrigData.TRaw;
         Data.t=OrigData.t;
     case {'DVTP'}
@@ -116,9 +120,14 @@ switch upper(FileType)
         OrigData=ImportNeedleData(FileName);
         Data.T=OrigData.T;
         Data.t=OrigData.t;
+    case {'TPFIT_RES'}
+        OrigData=ImportAdaraFit(FileName,'DoPlot',Opts.DoPlot);
+        Data.ModelType='APCT_T';
+        Data.T=OrigData.Data.T;
+        Data.t=OrigData.Data.t;
     otherwise
         warning('TPFit:UnknownData',['Sorry, unsupported data type! ' FileType ]);
-        Data=0;
+        Data=[];
         return
 end
 
@@ -131,3 +140,20 @@ FileInfo=dir(FileName);
 Info.FileDate=FileInfo.date;
 Data.ImportInfo=Info;
 Data.OrigData=OrigData;
+
+
+%% Subfunctions
+
+function PlotMatData(Data,FileName)
+clf;
+figure(gcf);
+plot(Data.t, Data.T,'-')
+xlabel('t (s)');
+ylabel('T (°C)');
+[FPath,ODPName]=fileparts(FileName);
+title([upper(ODPName) ' (mat-file)'],'interpreter','none');
+set(gca,...
+    'TickDir','out',...
+    'XMinorTick','on',...
+    'YMinorTick','on',...
+    'XLim',[min(Data.t) max(Data.t)]);
