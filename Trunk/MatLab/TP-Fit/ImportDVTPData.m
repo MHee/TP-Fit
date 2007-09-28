@@ -67,7 +67,7 @@ Data.t=round(t)';
 
 if Opts.DoPlot
     figure(gcf);
-    clf
+    cla;
 
     set(gcf,...
         'PaperType','A4',...
@@ -87,11 +87,12 @@ if Opts.DoPlot
     %
     % Acceleration
     %
-    hAcc=axes;
+    %hAcc=axes;
+    hAcc=gca;
     AxesPos=get(gca,'Position');
-    AxesPos(3:4)=0.9*AxesPos(3:4);
-    AxesPos(1:2)=0.05+AxesPos(1:2);
-    set(gca,'Position',AxesPos);
+%     AxesPos(3:4)=0.9*AxesPos(3:4);
+%     AxesPos(1:2)=0.05+AxesPos(1:2);
+%     set(gca,'Position',AxesPos);
 
     YLim=[0 2.5*max([Data.ap(find(isfinite(Data.ap))); 0.1])];
     hold on

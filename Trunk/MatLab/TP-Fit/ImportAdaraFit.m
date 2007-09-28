@@ -49,9 +49,12 @@ end
 
 % Import Leg information
 fLocateLine(fid,'LEG');
-Info.Leg=fscanf(fid,' LEG  %s',1);
+Info.Expedition=fscanf(fid,' LEG  %s',1);
 Info.Hole=fscanf(fid,' HOLE %s',1);
 Info.Core=fscanf(fid,' CORE %s',1);
+Info.Site=num2str(sscanf(ODPName,'%d%*s'));
+
+
 
 % Import Leg Picks
 fLocateLine(fid,'Penetration record');
@@ -126,7 +129,7 @@ TFit.Model=Model;
 % Data.tr=Data.t;
 % PlotFitResults(Data)
 if Opts.DoPlot
-    clf;
+    cla;
     hold on
     if ~isfield(Data,'tr')
         Data.tr=Data.t;
@@ -143,5 +146,5 @@ if Opts.DoPlot
     ylabel('Temperature (°C)');
     title(sprintf(['Original TFit Results\n'...
         'Leg %s - %s: k=%.2f W/(m K) T_f=%.2f °C'],...
-        Info.Leg,upper(ODPName), Props.Seds.k, Fit.Tf));
+        Info.Expedition,upper(ODPName), Props.Seds.k, Fit.Tf));
 end

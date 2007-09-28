@@ -1,5 +1,22 @@
-function MData=GetMetaDataDefaults
-% Initialize the meta data for TP-Fit
+function MData=GetMetaDataDefaults(varargin)
+% GETMETADATADEFAULTS  Initialize the meta data for TP-Fit
+%   
+%   Example
+%       Info=GetMetaDataDefaults
+%       Info=GetMetaDataDefaults('GetDefaults',false)
+%
+%   See also: GuessMetaData, CollectMetaData (TDataExplorer)
+
+%% Info
+%
+%   Copyright 2007  Martin Heesemann <heesema AT uni-bremen DOT de>
+
+
+%% Define options
+Opts.GetDefaults=true;
+Opts=ParseFunOpts(Opts,varargin);
+
+
 % 
 % See also GuessMetaData
 
@@ -15,3 +32,11 @@ MData.Operator='Martin Heesemann';
 MData.Initial_k='1';
 MData.Initial_rC='3.5e6';
 MData.Comment='';
+
+if ~Opts.GetDefaults
+    % Clear everything
+    fields=fieldnames(MData);
+    for i=1:length(fields)
+        MData.(fields{i})='';
+    end
+end

@@ -1,4 +1,4 @@
-function Data=ImportTemperatureData(varargin)
+function [Data,FileName]=ImportTemperatureData(varargin)
 %ImportTemperatureData Import data of IODP/ODP downhole temperature tools
 %
 % Data files of APCT-3 (ANTARES), older APCT tools (ADARA), and DVTP (DVTP)
@@ -109,15 +109,15 @@ switch upper(FileType)
         Data.T=OrigData.T;
         Data.t=OrigData.t;
     case {'ANTARES'}
-        OrigData=ImportWinTempDat(FileName);
+        OrigData=ImportWinTempDat(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.TRaw;
         Data.t=OrigData.t;
     case {'DVTP'}
-        OrigData=ImportDVTPData(FileName);
+        OrigData=ImportDVTPData(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.T1;
         Data.t=OrigData.t;
     case {'QBASIC_NEEDLE'}
-        OrigData=ImportNeedleData(FileName);
+        OrigData=ImportNeedleData(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.T;
         Data.t=OrigData.t;
     case {'TPFIT_RES'}
@@ -145,7 +145,7 @@ Data.OrigData=OrigData;
 %% Subfunctions
 
 function PlotMatData(Data,FileName)
-clf;
+cla;
 figure(gcf);
 plot(Data.t, Data.T,'-')
 xlabel('t (s)');

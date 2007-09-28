@@ -112,7 +112,7 @@ OneSec=datenum('00:00:02')-datenum('00:00:01');
 Data.t=round((Data.DateNum-Data.DateNum(1))/OneSec);
 
 if Opts.DoPlot
-    clf;
+    cla;
     figure(gcf);
     plot(Data.t, Data.TRaw,'-')
     xlabel('t (s)');

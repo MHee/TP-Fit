@@ -1,34 +1,62 @@
-function TPFit
+function TPFit(varargin)
 %TPFIT  Check TP-Fit installation and launch GUI window
 %   TP-Fit is a
+%
+%   Example
+%       ...=TPFit
+%
+%   See also: helprep, contentsrpt
+
+%% Info
+% * TODO: Sample todo
+% * FIXME: Sample fixme
+%
+%   Created: 28-Sep-2007 
+%   $Revision$  $Date$
+%
+%   Copyright 2007  Martin Heesemann <heesema AT uni-bremen DOT de>
+
 
 % TODO: Do test for previous installations
 % TODO: Add to path permanently
+% TODO: Add to Toolbox menu in (Start)
 % TODO: Remove from path
 
-%%
-% Firstly,...
+%% Define options
+Opts.Remove=false;
+Opts=ParseFunOpts(Opts,varargin);
+
+if Opts.Remove
+    rmpath(fileparts(which('TPFit_Window.m')));
+    rmpath(fileparts(which('TDataExplorer.m')));
+    rmpath(fileparts(which('TPFit.m')));
+    return
+end
 
 % Check check whether TP-Fit is properly installed
 CheckTPFitInstallation
 
-% Launch Version Info
+% Launch Version Info (HTML Docu)
 ShowTPFitHelp;
+
+% Launch TDataExplorer
+TDataExplorer;
 
 % Launch TP-Fit
 TPFit_Window;
 
 function CheckTPFitInstallation
-BasePath=fileparts(which(mfilename));
-ScriptPath=fullfile(BasePath,'TP-Fit');
+BasePath=fileparts(mfilename('fullpath'));
+TPFitPath=fullfile(BasePath,'TP-Fit');
+TDataExplorerPath=fullfile(BasePath,'TDataExplorer');
 %ModelPath=fullfile(BasePath,'RefModels');
 
 %OldBasePath=fileparts(which('APCT_TModels.mat'))
 %OldModelPath=fileparts(which('APCT_TModels.mat'))
-OldScriptPath=fileparts(which('TPFit_VersionInfo'))
-if ~isempty(OldScriptPath)
+OldTPFitPath=fileparts(which('TPFit_VersionInfo'));
+if ~isempty(OldTPFitPath)
     % TP-Fit already on path
-    if ~isequal(ScriptPath,OldScriptPath)
+    if ~isequal(TPFitPath,OldTPFitPath)
         warning('Over-riding old version of TP-Fit');
         %rmpath()
     end
@@ -37,7 +65,8 @@ end
 % Set Path 
 
 addpath(BasePath);
-addpath(ScriptPath);
+addpath(TPFitPath);
+addpath(TDataExplorerPath);
 %addpath(ModelPath);
 
 

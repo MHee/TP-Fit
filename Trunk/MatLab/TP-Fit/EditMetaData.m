@@ -1,13 +1,20 @@
-function MData=EditMetaData(MData)
+function MData=EditMetaData(varargin)
 % Edit the Meta-Data that is used and stored in TP-Fit data
 
-if ~exist('MData','var')
-    MData=GetMetaDataDefaults;
+Opts.GetDefaults=true;
+[Opts, unusedOpts]=ParseFunOpts(Opts,varargin);
+
+if length(unusedOpts)==1
+    % Usually MData is first unused option
+    MData=unusedOpts{1};
 end
 
-% If Old MData does not contain found in MetaDataDefaults add the
-% DefaultFields
-MData=ParseFunOpts(GetMetaDataDefaults,MData);
+if ~exist('MData','var')
+    MData=GetMetaDataDefaults('GetDefaults',Opts.GetDefaults);
+end
+
+% Make sure Meta Data contains all fields that are defined in the defaults
+MData=ParseFunOpts(GetMetaDataDefaults('GetDefaults',Opts.GetDefaults),MData);
 
 FieldNames=fieldnames(MData);
     

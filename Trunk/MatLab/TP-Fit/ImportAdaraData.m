@@ -35,22 +35,27 @@ end
 
 %% Get Meta data
 fLocateLine(fid,'Serial Number:');
-Info.SerialNumber=fscanf(fid,'%*21c %d',1);
+Info.ToolID=num2str(fscanf(fid,'%*21c %d',1));
 
 fLocateLine(fid,'Cruise Leg:');
-Info.Leg=fscanf(fid,'%*21c %d',1);
+Info.Expedition=num2str(fscanf(fid,'%*21c %d',1));
 
 fLocateLine(fid,'Site:');
-Info.Site=fscanf(fid,'%*21c %d',1);
+Info.Site=num2str(fscanf(fid,'%*21c %d',1));
 
 fLocateLine(fid,'Hole:');
 Info.Hole=upper(fscanf(fid,'%*21c %s',1));
 
 fLocateLine(fid,'Core:');
-Info.Core=upper(fscanf(fid,'%*21c %d',1));
+Info.Core=num2str(upper(fscanf(fid,'%*21c %d',1)));
 
 fLocateLine(fid,'Subbottom depth:');
-Info.Depth=upper(fscanf(fid,'%*21c %f',1));
+Info.Depth=num2str(upper(fscanf(fid,'%*21c %f',1)));
+
+if isempty(Info.Site)
+    [Dummy,BaseName]=fileparts(FileName);
+    Info.Site=num2str(sscanf(BaseName,'%d%*s'));
+end
 
 
 Data.Info=Info;
@@ -76,7 +81,7 @@ end
 fclose(fid);
 
 if Opts.DoPlot
-    clf;
+    cla;
     figure(gcf);
     plot(Data.t, Data.T,'-')
     xlabel('t (s)');

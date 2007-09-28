@@ -93,23 +93,27 @@ varargout{1} = handles.output;
 
 
 % --- Executes on button press in Load.
-function Load_Callback(hObject, eventdata, handles)
+function Load_Callback(hObject, eventdata, handles,FileName)
 % hObject    handle to Load (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
 Settings=get(handles.Load,'UserData');
-
-Data=ImportTemperatureData('StartDir',Settings.DataDir);
-%,... 'DefaultInfo',Settings.Info
+if exist('FileName','var')
+    [Data, FileName]=ImportTemperatureData(FileName);
+else
+    [Data, FileName]=ImportTemperatureData('StartDir',Settings.DataDir);
+    %,... 'DefaultInfo',Settings.Info
+end
 
 if (isstruct(Data) && ~isempty(Data))
+    Settings.CurrentFile=FileName;
+    
     if ~isfield(Data,'Info')
         Settings.Info;
         Data=GuessMetaData(Data,'Info',Settings.Info);
         %Data.Info;
     end
-    
+
     TPFitInfo=TPFit_VersionInfo;
     fprintf('\n====== TP-Fit Version %g ======\n',TPFitInfo.Version);
     if ~isfield(Data,'TPFitInfo')
@@ -122,7 +126,7 @@ if (isstruct(Data) && ~isempty(Data))
             %structree(TPFitInfo);
         else
             warndlg({'Version mismatch detected !!!';...
-                      'See prompt for details'});
+                'See prompt for details'});
             fprintf('Data was processed with TP-Fit version:\n');
             structree(Data.TPFitInfo);
             fprintf('Your version is:\n');
@@ -131,8 +135,8 @@ if (isstruct(Data) && ~isempty(Data))
             Data.TPFitInfo=TPFitInfo;
         end
     end
-    
-    
+
+
     set(handles.TPFit,'UserData',Data);
     UpdateButtonColors(handles);
 
@@ -264,23 +268,26 @@ function Save_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 Data=get(handles.TPFit,'UserData');
-SaveSession(Data);
+Settings=get(handles.Load,'UserData');
+SaveSession(Data,Settings.CurrentFile);
 %handles
 
 function Report_Callback(hObject, eventdata, handles)
 Data=get(handles.TPFit,'UserData');
+Settings=get(handles.Load,'UserData');
 
-FileBase=[Data.ImportInfo.DatPath strtok(Data.ImportInfo.DatFile,'.')];
+[RPath,RBase]=fileparts(Settings.CurrentFile);
+FileBase=fullfile(RPath,RBase);
+
 TimeStampStr=sprintf('TP-Fit V%g: %s processed by %s   ',...
     Data.TPFitInfo.Version,Data.ImportInfo.DatFile, Data.Info.Operator);
 
-[FileBase 'Report.txt']
-MakeReport(Data,[FileBase 'Report.txt']);
+MakeReport(Data,[FileBase '_Report.txt']);
 %get(gcf)
 h=OpenExtWindow(handles,'Results');
 hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
 %set(0,'CurrentFigure',h);figure(h);pause(2);
-%drawnow; 
+%drawnow;
 %get(gcf,'Name')
 %gcf
 print('-f63001','-depsc','-painters',...  ,'-adobecset'
