@@ -156,9 +156,10 @@ function OpenMenuItem_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 Data=get(handles.TDataExplorer,'UserData');
-file = uigetfile('*.mat');
-if ~isequal(file, 0)
-    load(file);
+[FileName,PathName] = uigetfile('*.mat');
+FullFileName=fullfile(PathName,FileName);
+if ~isequal(FileName, 0)
+    load(FullFileName);
     if ~(exist('Data','var') && isfield(Data,'DB'))
         warning('TDataExplorer:NoFile','No Data base File!!!!');
         return
@@ -183,12 +184,12 @@ if ~isfield(Data,'CurrentTag')
     Data.CurrentTag=1;
 end
 
-fprintf('Opened %s\n',file);
+fprintf('Opened %s\n',FullFileName);
 
 Settings=get(handles.OpenMenuItem,'UserData');
-Settings.DBLocation=file;
+Settings.DBLocation=FullFileName;
 set(handles.TDataExplorer,'Name',...
-    sprintf('TDataExplorer - %s',file));
+    sprintf('TDataExplorer - %s',FullFileName));
 set(handles.OpenMenuItem,'UserData',Settings);
 
 set(handles.TDataExplorer,'UserData',Data);
