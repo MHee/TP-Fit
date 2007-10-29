@@ -308,8 +308,10 @@ text(0.9,0.9,...
     'Units','normalized');
 plot(polyval(p,[0 max(R)]),[0 max(R)],'k--');
 
-p_1039=[0.0115 1.975];
-plot(polyval(p_1039,[0 max(R)]),[0 max(R)],'k:');
+% Plot results for site 1039
+%p_1039=[0.0115 1.975];
+%plot(polyval(p_1039,[0 max(R)]),[0 max(R)],'k:');
+
 for i=1:length(handles.TDat)
     if isfinite(TDat(i).T)
         plot(TDat(i).T,R(i),['k' Markers{MarkerNums(i)}],...
