@@ -25,6 +25,7 @@ end
 
 %% Define options
 Opts.DoPlot=true;
+Opts.Debug=false;
 Opts=ParseFunOpts(Opts,varargin);
 
 fid=fopen(FileName,'r');
@@ -34,29 +35,17 @@ if (fid<1)
 end
 
 %% Get Meta data
-fLocateLine(fid,'Serial Number:');
-Info.ToolID=num2str(fscanf(fid,'%*21c %d',1));
-
-fLocateLine(fid,'Cruise Leg:');
-Info.Expedition=num2str(fscanf(fid,'%*21c %d',1));
-
-fLocateLine(fid,'Site:');
-Info.Site=num2str(fscanf(fid,'%*21c %d',1));
-
-fLocateLine(fid,'Hole:');
-Info.Hole=upper(fscanf(fid,'%*21c %s',1));
-
-fLocateLine(fid,'Core:');
-Info.Core=num2str(upper(fscanf(fid,'%*21c %d',1)));
-
-fLocateLine(fid,'Subbottom depth:');
-Info.Depth=num2str(upper(fscanf(fid,'%*21c %f',1)));
+Info.ToolID=ExtractLineData(fid,'Serial Number:');
+Info.Expedition=ExtractLineData(fid,'Cruise Leg:');
+Info.Site=ExtractLineData(fid,'Site:');
+Info.Hole=ExtractLineData(fid,'Hole:');
+Info.Core=ExtractLineData(fid,'Core:');
+Info.Depth=ExtractLineData(fid,'Subbottom depth:');
 
 if isempty(Info.Site)
     [Dummy,BaseName]=fileparts(FileName);
     Info.Site=num2str(sscanf(BaseName,'%d%*s'));
 end
-
 
 Data.Info=Info;
 
@@ -95,17 +84,31 @@ if Opts.DoPlot
         'XLim',[min(Data.t) max(Data.t)]);
 end
 
+if Opts.Debug
+    assignin('base','AData',Data);
+end
+
+function LDat=ExtractLineData(fid,MatchStr,varargin)
+[Found,Lines]=fLocateLine(fid,MatchStr,varargin{:},'Continue',true);
+Line=Lines{end};
+[Dummy,DStart]=regexp(Line,MatchStr);
+Line=Line(DStart+1:end);
+DEnd=regexp(Line,'".*$');
+LDat=strtrim(Line(1:DEnd-1));
+
+
+
+
 function [Event,T,t,tNext]=ReadEventInfo(fid,FileName)
-Event.Number=fscanf(fid,'%*17c %d%*s',1);
-fLocateLine(fid,'Start time','EditFile',FileName);
-Event.tStart=fscanf(fid,'%*17c %11c%*s',1);
-fLocateLine(fid,'Stop time','EditFile',FileName);
-Event.tStop=fscanf(fid,'%*17c %11c%*s',1);
-fLocateLine(fid,'Increment time','EditFile',FileName);
-Event.tInc=fscanf(fid,'%*17c %11c%*s',1);
-Event.Sampling=str2num(Event.tInc(end-1:end));
-fLocateLine(fid,'Number Scans','EditFile',FileName);
-Event.NScans=fscanf(fid,'%*17c %d%*s',1);
+
+Event.Number=ExtractLineData(fid,'Event Number:');
+Event.tStart=ExtractLineData(fid,'Start time:','EditFile',FileName);
+Event.tStop=ExtractLineData(fid,'Stop time:','EditFile',FileName);
+Event.tInc=ExtractLineData(fid,'Increment time:','EditFile',FileName);
+Event.Sampling=str2double(Event.tInc(end-1:end));
+Event.NScans=ExtractLineData(fid,'Number Scans:','EditFile',FileName);
+
+% Read data block of event
 fgetl(fid);
 T=textscan(fid,'%*d, %f',Event.NScans);
 T=T{1};

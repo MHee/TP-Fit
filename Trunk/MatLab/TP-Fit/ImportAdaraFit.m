@@ -64,13 +64,14 @@ Picks.rEnd=fscanf(fid,' Last data to process  = %d',1);
 
 % Import model parameters
 fLocateLine(fid,'A=');
-Props.r=fscanf(fid,'A=%f B=%f %*s',2); 
-fLocateLine(fid,'C1=');
-k=fscanf(fid,'C1=%f C2=%f %*s',2);
+Props.r=fscanf(fid,'%*s%f B=%f %*s',2);
+fLocateLine(fid,'C1=','verbose',false);
+%assignin('base','Line',fgetl(fid))
+k=fscanf(fid,'%*s%f C2=%f %*s',2);
 Props.Seds.k=k(1);
 Props.Probe.k=k(2);
 fLocateLine(fid,'D1=');
-kappa=fscanf(fid,'D1=%f D2=%f %*s',2);
+kappa=fscanf(fid,'%*s%f D2=%f %*s',2);
 Props.Seds.rc=k(1)/kappa(1);
 Props.Probe.rc=k(2)/kappa(2);
 Props.Seds.kappa=kappa(1);
@@ -83,7 +84,7 @@ Sampling=fscanf(fid,'%*d Temperature data at %f %*s',1);
 % Import model results
 fLocateLine(fid,'BEST FIT');
 fLocateLine(fid,'SHIFT=');
-FitRes=fscanf(fid,'SHIFT=%d  T0=  %f   B=  %f     SE= %f',4);
+FitRes=fscanf(fid,'%*s%d  T0=  %f   B=  %f     SE= %f',4);
 Fit.tSft=FitRes(1);
 Fit.Tf=FitRes(2);
 Fit.b=FitRes(3);

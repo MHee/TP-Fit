@@ -26,7 +26,7 @@ end
 Opts.PlotProgress=false;
 Opts.DoPlot=false;
 Opts=ParseFunOpts(Opts,varargin);
-
+Failed=[];
 for i=1:length(DB)
     CurrDir=DB(i).Dir;
     if ~Opts.PlotProgress
@@ -45,7 +45,14 @@ for i=1:length(DB)
             fprintf('%s\n',CurrFile);
         end
         % Get Defaults
-        Data=ImportTemperatureData(fullfile(DB(i).Dir,DB(i).Files{FNo}),'DoPlot',Opts.DoPlot);
+        try
+            Data=ImportTemperatureData(fullfile(DB(i).Dir,DB(i).Files{FNo}),'DoPlot',Opts.DoPlot);
+        catch
+            'failed'
+            fullfile(DB(i).Dir,DB(i).Files{FNo})
+            Failed=[Failed i];
+            continue
+        end
         if (isfield(Data,'ImportInfo') && isfield(Data.ImportInfo,'DataType'))
             DB(i).DataType=Data.ImportInfo.DataType;
 %             DB(i).DataType
@@ -88,4 +95,8 @@ for i=1:length(DB)
 %         DB(i).Core=Data.OrigData.Info.Core;
 %         DB(i).Depth=Data.OrigData.Info.Depth;
 %     end
+end
+
+if ~isempty(Failed)
+    DB(Failed)=[];
 end

@@ -139,6 +139,7 @@ fprintf('------ Collecting meta data -----\n');
 DB=CollectMetaData(DB);
 Data.DB=DB;
 Data.CurrRec=1;
+Data.CurrentTag=[];
 Data.Filter=1:length(Data.DB);
 % for i=1:length(Data.DB)
 %     Data.DB(i).BadData=0;

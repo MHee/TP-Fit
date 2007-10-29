@@ -83,6 +83,10 @@ plot(RefDat.t+Data.Res.tSfts(NSft),...
     Data.Res.Fit(NSft,1)*RefDat.T+Data.Res.Fit(NSft,2),...
     'Color',[1 .7 .7],'LineWidth',5);
 
+
+if isfield(Data.OrigData,'T2')
+    plot(Data.tr, Data.OrigData.T2,'.-','Color',[.7 .7 1]);
+end
 plot(Data.tr, Data.T,'.-');
 
 %Plot Selection markers
