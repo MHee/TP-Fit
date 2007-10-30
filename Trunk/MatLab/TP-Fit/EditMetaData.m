@@ -31,6 +31,14 @@ while ~DataOK
         end
     end
     
+    if ~isempty(MData.Initial_k) && isempty(MData.Initial_rC)
+        % Set Initial_rC to \citet{Horai1985}
+        k=str2double(MData.Initial_k);
+        kappa=(3.657*k-0.70)*1e-7; % /10e7
+        MData.Initial_rC=sprintf('%.2g',k./kappa);
+    end
+    
+    
     DataOK=true;
 %     if length(str2num(MData.Depth))==1
 %         DataOK=true;
