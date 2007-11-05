@@ -23,14 +23,18 @@ function TPFit(varargin)
 % TODO: Remove from path
 
 %% Define options
-Opts.Remove=false;
-Opts=ParseFunOpts(Opts,varargin);
+Opts.Remove=false; % Remove TP-Fit from path
 
-if Opts.Remove
-    rmpath(fileparts(which('TPFit_Window.m')));
-    rmpath(fileparts(which('TDataExplorer.m')));
-    rmpath(fileparts(which('TPFit.m')));
-    return
+if ~isempty(which('ParseFunOpts'))
+    Opts=ParseFunOpts(Opts,varargin);
+    
+    if Opts.Remove
+        % Remove TP-Fit from path
+        rmpath(fileparts(which('TPFit_Window.m')));
+        rmpath(fileparts(which('TDataExplorer.m')));
+        rmpath(fileparts(which('TPFit.m')));
+        return
+    end
 end
 
 % Check check whether TP-Fit is properly installed
