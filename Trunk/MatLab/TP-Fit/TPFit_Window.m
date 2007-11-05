@@ -292,6 +292,10 @@ hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
 %gcf
 print('-f63001','-depsc','-painters',...  ,'-adobecset'
     [FileBase '_Result.eps']);
+
+print('-f63001','-dpng','-painters','-r300',...  ,'-adobecset'
+    [FileBase '_Result.png']);
+
 delete(hStmp);
 
 h=OpenExtWindow(handles,'Contours');
@@ -303,6 +307,10 @@ hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
 %gcf
 print('-f63002','-depsc','-painters',...  ,'-adobecset'
     [FileBase '_Contours.eps']);
+
+print('-f63002','-dpng','-painters','-r300',...  ,'-adobecset'
+    [FileBase '_Contours.png']);
+
 delete(hStmp);
 
 
@@ -411,7 +419,7 @@ if isfield(hWins,WTitle)
                 set(63002,'Name',WTitle,'NumberTitle','off');
                 
                 % Set Paper Defaults
-                set(63001,...
+                set(63002,...
                     'PaperType','A4','PaperUnits','centimeters',...
                     'PaperOrientation','portrait',...
                     'PaperPosition',[1 1 [20.984 29.6774]-1]);
