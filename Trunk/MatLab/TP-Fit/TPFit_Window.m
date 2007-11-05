@@ -293,7 +293,7 @@ hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
 print('-f63001','-depsc','-painters',...  ,'-adobecset'
     [FileBase '_Result.eps']);
 
-print('-f63001','-dpng','-painters','-r300',...  ,'-adobecset'
+print('-f63001','-dpng','-r300',...  ,'-adobecset'
     [FileBase '_Result.png']);
 
 delete(hStmp);
@@ -308,7 +308,7 @@ hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
 print('-f63002','-depsc','-painters',...  ,'-adobecset'
     [FileBase '_Contours.eps']);
 
-print('-f63002','-dpng','-painters','-r300',...  ,'-adobecset'
+print('-f63002','-dpng','-r300',...  ,'-adobecset'
     [FileBase '_Contours.png']);
 
 delete(hStmp);
