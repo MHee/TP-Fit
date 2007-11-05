@@ -375,6 +375,7 @@ hWins.Comment=[];
 AppData.hWins=hWins;
 set(handles.Quit,'UserData',AppData);
 
+%% OpenExtWindow
 function h=OpenExtWindow(handles,WTitle)
 % Manages the external windows
 
@@ -398,9 +399,23 @@ if isfield(hWins,WTitle)
             case 'Results'
                 hWins.Results=figure(63001);
                 set(63001,'Name',WTitle,'NumberTitle','off');
+                
+                % Set Paper Defaults
+                set(63001,...
+                    'PaperType','A4','PaperUnits','centimeters',...
+                    'PaperOrientation','portrait',...
+                    'PaperPosition',[1 1 [20.984 29.6774]-1]);
+                
             case 'Contours'
                 hWins.Contours=figure(63002);
                 set(63002,'Name',WTitle,'NumberTitle','off');
+                
+                % Set Paper Defaults
+                set(63001,...
+                    'PaperType','A4','PaperUnits','centimeters',...
+                    'PaperOrientation','portrait',...
+                    'PaperPosition',[1 1 [20.984 29.6774]-1]);
+                
             otherwise
                 hWins.(WTitle)=figure('IntegerHandle','on',...
                     'Name',WTitle,'NumberTitle','off');
