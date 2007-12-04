@@ -24,7 +24,7 @@ function varargout = TPFit_Window(varargin)
 
 % Edit the above text to modify the response to help TPFit_Window
 
-% Last Modified by GUIDE v2.5 08-Dec-2006 06:11:43
+% Last Modified by GUIDE v2.5 03-Dec-2007 14:45:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -555,3 +555,27 @@ function ReportResults(hObject, eventdata, handles,Res,hTPFit)
 Data=get(hTPFit,'UserData');
 Data.Res=Res;
 set(hTPFit,'UserData',Data);
+
+%% Context Menu
+
+% --------------------------------------------------------------------
+function LaunchTDataExplorer_Callback(hObject, eventdata, handles)
+% hObject    handle to LaunchTDataExplorer (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+TDataExplorer;
+
+% --------------------------------------------------------------------
+function LaunchBullardPlot_Callback(hObject, eventdata, handles)
+% hObject    handle to LaunchBullardPlot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+BullardPlotWin;
+
+% --------------------------------------------------------------------
+function LoadContextMenu_Callback(hObject, eventdata, handles)
+% hObject    handle to LoadContextMenu (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+return
+

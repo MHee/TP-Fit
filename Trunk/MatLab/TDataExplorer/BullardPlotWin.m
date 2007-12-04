@@ -54,7 +54,8 @@ function BullardPlotWin_OpeningFcn(hObject, eventdata, handles, varargin)
 
 % Choose default command line output for BullardPlotWin
 
-Opts.OpenBaseName='d:\home\martin\TODP\TTool_Database\APCT\168\1028\1028_USIO_'
+%Opts.OpenBaseName='d:\home\martin\TODP\TTool_Database\APCT\168\1028\1028_USIO_'
+Opts.OpenBaseName=''
 Opts=ParseFunOpts(Opts,varargin)
 
 handles.output = hObject;
@@ -134,8 +135,17 @@ function AddData_Callback(hObject, eventdata, handles)
 % --------------------------------------------------------------------
 function ClearTemperatures_Callback(hObject, eventdata, handles)
 handles.TDat=[];
+cla(handles.TDiffPlot);
+cla(handles.BullardPlot);
+cla(handles.LegendPlot);
+cla(handles.kPlot);
+handles.kDat=[];
+
+legend(handles.LegendPlot,'off');
+
 guidata(handles.BullardPlot, handles);
 UpdatePlots(handles);
+assignin('base','handles',handles);
 
 % --------------------------------------------------------------------
 function AddSingleTemperature_Callback(hObject, eventdata, handles)

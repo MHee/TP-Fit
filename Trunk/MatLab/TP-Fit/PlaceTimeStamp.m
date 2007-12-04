@@ -20,7 +20,7 @@ Pos=get(h,'Position');
 aPos=get(gca,'Position');
 %Pos(1:2)=[1-Pos(3) 0];
 Pos(1:2)=[aPos(1)+aPos(3)-Pos(3) 0];
-
+Pos
 set(h,'Position',Pos);
 
 %get(h)
