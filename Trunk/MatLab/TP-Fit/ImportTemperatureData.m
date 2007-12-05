@@ -71,11 +71,11 @@ if ~isempty(Opts.FileType)
     FileType=Opts.FileType;
 else
     % Automaticly determine file type (ADARA, ANTARES, DVTP)
-    fid=fopen(FileName);
+    fid=fopen(FileName,'r');
     Line1=fgetl(fid);
     Line2=fgetl(fid);
     Line3=fgetl(fid);
-    fclose(fid);
+    fseek(fid,0,'bof'); % rewind file
 
     if (strncmp(Line1,...
             '" **** Adara Temperature Tool Data File Version 3.0 ****"',56) || ...
@@ -86,6 +86,8 @@ else
         FileType='ADARA';
     elseif (strncmp(Line1,'origin:',6) && strncmp(Line2,'string:',6))
         FileType='DVTP';
+    elseif fLocateLine(fid,'CF-2 SERIAL NUMBER:')
+        FileType='SETP_PROTOTYPE';
     elseif strncmp(Line3,'# LoggerIdentifier',18)
         FileType='ANTARES';
     elseif strcmpi(ext,'.npm')
@@ -98,8 +100,10 @@ else
             edit(FileName);
         end
         Data=[];
+        fclose(fid);
         return
     end
+    fclose(fid);
 end
 
 % Import Data with routines depending on FileType
@@ -115,6 +119,10 @@ switch upper(FileType)
     case {'DVTP'}
         OrigData=ImportDVTPData(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.T1;
+        Data.t=OrigData.t;
+    case {'SETP_PROTOTYPE'}
+        OrigData=ImportNewDVTPPData(FileName,'DoPlot',Opts.DoPlot);
+        Data.T=OrigData.T;
         Data.t=OrigData.t;
     case {'QBASIC_NEEDLE'}
         OrigData=ImportNeedleData(FileName,'DoPlot',Opts.DoPlot);

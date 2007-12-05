@@ -1,7 +1,5 @@
-function Data=ImportDVTPData(FileName,varargin)
-% IMPORTDVTPDATA   Imports the original DVTP data format
-%   Example
-%       ...=ImportDVTPData
+function Data=ImportNewDVTPPData(FileName,varargin)
+% IMPORTDVTPDATA   Imports data of the new DVTP(P) Data logger
 %
 %   See also: ImportTemperatureData
 
@@ -9,17 +7,17 @@ function Data=ImportDVTPData(FileName,varargin)
 % Copyright (C) 2007  Martin Heesemann  <heesema AT uni-bremen DOT de>
 
 % This file is part of TP-Fit.
-% 
+%
 %     TP-Fit is free software: you can redistribute it and/or modify
 %     it under the terms of the GNU General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
 %     (at your option) any later version.
-% 
+%
 %     TP-Fit is distributed in the hope that it will be useful,
 %     but WITHOUT ANY WARRANTY; without even the implied warranty of
 %     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 %     GNU General Public License for more details.
-% 
+%
 %     You should have received a copy of the GNU General Public License
 %     along with TP-Fit.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -27,9 +25,10 @@ function Data=ImportDVTPData(FileName,varargin)
 %% Self-test
 if ~exist('FileName','var')
 
-    [DatFile,DatPath]=uigetfile({'*.eng';'*.*'},'WinTemp Data');
-    FileName=fullfile(DatPath, DatFile)
-
+    %[DatFile,DatPath]=uigetfile({'*.dat';'*.*'},'DVTPP Data (New Version)');
+    %FileName=fullfile(DatPath, DatFile)
+    %FileName='SETP_Test.dat';
+    FileName='SETP_Test_original.dat';
     varargin={'DoPlot',true};
 end
 
@@ -45,6 +44,110 @@ end
 Opts.DoPlot=true;
 Opts=ParseFunOpts(Opts,varargin);
 
+
+%% Read Data
+fid=fopen(FileName);
+if (fid<1)
+    warning('TPFit:FileNotFound','Could not open file %s',FileName);
+    return
+end
+
+%% Import Header Info
+fLocateLine(fid,' ACQUISITION DATE:');
+Info.StartDateStr=fscanf(fid,' ACQUISITION DATE:,,,%s');
+Info.CF2_Serial=fscanf(fid,' CF-2 SERIAL NUMBER:,,,%s');
+Info.ProgramVersion=fscanf(fid,' PROGRAM VERSION:,,,%s');
+Info.LastCalibration=fscanf(fid,' LAST CALIBRATION DATE:,,,%s');
+Info.FileReference=fscanf(fid,'FILE REFERENCE:,,,%s');
+Info.PressureTransducerID=fscanf(fid,' PRESSURE TRANSDUCER S/N:,,,%s');
+
+%% Import Data Section
+fLocateLine(fid,'HH:MM:SS','Continue',true);
+DataBlock=textscan(fid,'%s %f %f %f %f %s %s %f %f %f','delimiter',',');
+
+RefDateNum=datenum(Info.StartDateStr);
+
+TStop=min(find(strcmp(DataBlock{1},'')))-1;
+Data.DateNum=datenum(DataBlock{1}(1:TStop))-datenum('00:00:00')+RefDateNum;
+Data.t=(Data.DateNum-Data.DateNum(1))/...
+    (datenum('00:00:01')-datenum('00:00:00'));
+
+Data.T=DataBlock{2}(1:TStop);
+Data.R=DataBlock{3}(1:TStop);
+Data.Tint=DataBlock{4}(1:TStop);
+Data.Vbat=DataBlock{5}(1:TStop);
+Data.P=str2double(DataBlock{6}(1:TStop)); % Pressure can be empty !!!
+
+Data.DateNumG=datenum(DataBlock{7})-datenum('00:00:00')+RefDateNum;
+Data.tG=(Data.DateNumG-Data.DateNum(1))/...
+    (datenum('00:00:01')-datenum('00:00:00'));
+
+Data.Gx=DataBlock{8};
+Data.Gy=DataBlock{9};
+Data.Gz=DataBlock{10};
+
+fclose(fid);
+
+if any(diff(Data.DateNum)<=0)
+    warndlg(['There are times extending mid-night!!!!  ' ...
+        'That is not handled for this type of data, yet.']);
+end
+
+Data.Info=Info;
+%Data.DataBlock=DataBlock;
+
+if Opts.DoPlot
+    clf
+    LegendLoc='SouthEast';
+
+    ha(1)=subplot(4,1,1);
+    hold on
+    plot(Data.t,Data.T,'r');
+    plot(Data.t,Data.Tint,'r:');
+    legend({'T','T_{int}'},'Location',LegendLoc);
+    ylabel('Temperature (°C)');
+
+    ha(2)=subplot(4,1,2);
+    hold on
+    plot(Data.t,Data.Vbat,'g');
+    legend({'Battery'},'Location',LegendLoc);
+    ylabel('Voltage (V)');
+
+    ha(3)=subplot(4,1,3);
+    hold on
+    plot(Data.t,Data.P,'b');
+    legend({'Pressure'},'Location',LegendLoc);
+    ylabel('Pressure (PSI)');
+
+    ha(4)=subplot(4,1,4);
+    hold on
+    plot(Data.tG,Data.Gx,'k');
+    plot(Data.tG,Data.Gy,'r');
+    plot(Data.tG,Data.Gz,'g');
+    legend({'acc_x','acc_y','acc_z'},'Location',LegendLoc);
+    ylabel('Acceleration (g)');
+    xlabel('Time (s)');
+
+    set(ha,...
+        'Box','on');
+
+    linkaxes(ha,'x');
+end
+
+return
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Old Stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Info.Expedition=fscanf(fid,' LEG  %s',1);
+Info.Hole=fscanf(fid,' HOLE %s',1);
+Info.Core=fscanf(fid,' CORE %s',1);
+Info.Site=num2str(sscanf(ODPName,'%d%*s'));
 
 
 [Data.DateStr, Data.No, Data.T1, Data.T2, Data.Ti, Data.Tr, Data.ap, Data.am]=...
@@ -79,13 +182,13 @@ if Opts.DoPlot
         'PaperType','A4',...
         'PaperUnits','centimeters');
 
-%     PaperSize=get(gcf,'PaperSize');
-%     %PaperPosition=[0.5 0.5 PaperSize-1];
-%     PaperPosition=[5 17 13 9];
-%     Position=[5 34 (660*PaperPosition(3)/PaperPosition(4)) 660];
-%     set(gcf,...
-%         'PaperPosition',PaperPosition,...
-%         'Position',Position);
+    %     PaperSize=get(gcf,'PaperSize');
+    %     %PaperPosition=[0.5 0.5 PaperSize-1];
+    %     PaperPosition=[5 17 13 9];
+    %     Position=[5 34 (660*PaperPosition(3)/PaperPosition(4)) 660];
+    %     set(gcf,...
+    %         'PaperPosition',PaperPosition,...
+    %         'Position',Position);
 
     XLim=[t(1) t(length(t))];
     %XLim=[50 65];
@@ -96,9 +199,9 @@ if Opts.DoPlot
     %hAcc=axes;
     hAcc=gca;
     AxesPos=get(gca,'Position');
-%     AxesPos(3:4)=0.9*AxesPos(3:4);
-%     AxesPos(1:2)=0.05+AxesPos(1:2);
-%     set(gca,'Position',AxesPos);
+    %     AxesPos(3:4)=0.9*AxesPos(3:4);
+    %     AxesPos(1:2)=0.05+AxesPos(1:2);
+    %     set(gca,'Position',AxesPos);
 
     YLim=[0 2.5*max([Data.ap(find(isfinite(Data.ap))); 0.1])];
     hold on
@@ -143,10 +246,10 @@ if Opts.DoPlot
     plot([0 1],[-1000 -1000],'k-', 'Color',0.6*[1 1 1])
 
     hold off
-    
+
     [FPath,ODPName]=fileparts(FileName);
     title(['DVTP:' upper(ODPName)]);
-    
+
     YLim=[floor(min([Data.T1' Data.T2'])) ...
         ceil(max([Data.T1' Data.T2']))];
 
@@ -179,118 +282,3 @@ if Opts.DoPlot
     linkaxes([hDat,hAcc],'x');
     grid on;
 end
-
-% return
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% % estimate Autopick
-% MeanNoise=mean(apStd);
-% LowNoise=find((apStd<0.15*MeanNoise));
-%
-% [Dummy,PenStart]=max(CumDiffT);
-% [Dummy,PenStop] =min(CumDiffT);
-%
-%
-% figure(1)
-% subplot(4,1,1)
-% plot(Data.No,Data.T2,'g.-')
-% hold on
-% plot(Data.No,Data.T1,'b.-')
-% plot(Data.No([PenStart PenStop]),Data.T1([PenStart PenStop]),'r*')
-% hold off
-%
-% if (PenStart<PenStop)
-%     XLim=[PenStart-5 PenStop+5];
-% else
-%     XLim=get(gca,'Xlim');
-% end
-%
-% set(gca,...
-%     'XLim',XLim,...
-%     'TickDir','out',...
-%     'XMinorTick','on',...
-%     'YMinorTick','on',...
-%     'Box','on',...
-%     'XGrid','on'...
-%     )
-% h=title(FileName);
-% set(h,'Interpreter','none');
-% ylabel('Temperature (°C)');
-%
-% subplot(4,1,2)
-% plot(Data.No, [Data.ap Data.am],'.-')
-% set(gca,...
-%     'XLim',XLim,...
-%     'TickDir','out',...
-%     'XMinorTick','on',...
-%     'YMinorTick','on',...
-%     'Box','on',...
-%     'XGrid','on'...
-%     )
-% ylabel('Acceleration (???)');
-%
-% subplot(4,1,3)
-% plot(Data.No,[1 ;diff(Data.T1)])
-% set(gca,...
-%     'XLim',XLim,...
-%     'TickDir','out',...
-%     'XMinorTick','on',...
-%     'YMinorTick','on',...
-%     'Box','on',...
-%     'XGrid','on'...
-%     )
-% subplot(4,1,4)
-% plot(Data.No,apStd)
-% hold on
-% plot(Data.No(LowNoise),apStd(LowNoise),'r.')
-% hold off
-% set(gca,...
-%     'XLim',XLim,...
-%     'TickDir','out',...
-%     'XMinorTick','on',...
-%     'YMinorTick','on',...
-%     'Box','on',...
-%     'XGrid','on'...
-%     )
-% xlabel('Sample no.');
-%
-% figure(2)
-%
-% %plot(Data.No,[1 ;abs(diff(Data.T1))]./apStd)
-% plot(Data.No,Data.T2,'g-')
-% hold on
-% plot(Data.No,Data.T1,'b-')
-% plot(Data.No([PenStart PenStop]),Data.T1([PenStart PenStop]),'r*')
-% hold off
-%
-% set(gca,...
-%  ...   'XLim',XLim,...
-%     'TickDir','out',...
-%     'XMinorTick','on',...
-%     'YMinorTick','on',...
-%     'Box','on',...
-%     'XGrid','on'...
-%     )
-%
-% figure(3)
-% plot(Data.No,Data.T2,'g.-')
-% hold on
-% plot(Data.No,Data.T1,'b.-')
-% plot(Data.No([PenStart PenStop]),Data.T1([PenStart PenStop]),'r*')
-% hold off
-% legend('T2', 'T1', 'AutoPick',0)
-% set(gca,...
-%     'XLim',XLim,...
-%     'TickDir','out',...
-%     'XMinorTick','on',...
-%     'YMinorTick','on',...
-%     'Box','on',...
-%     'XGrid','on'...
-%     )
-% grid on
-% h=title(FileName);
-% set(h,'Interpreter','none');
-% ylabel('Temperature (°C)');
-% xlabel('Sample no.');
-% figure(2)

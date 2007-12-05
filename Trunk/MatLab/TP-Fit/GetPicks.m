@@ -3,7 +3,7 @@ if ~isfield(Data,'ModelType')
     switch Data.ImportInfo.DataType
         case {'ANTARES','ADARA','TPFIT_RES'}
             Data.ModelType='APCT_T';
-        case 'DVTP'
+        case {'DVTP','SETP_PROTOTYPE'}
             Data.ModelType='DVTP_T';
         case 'QBASIC_NEEDLE'
             Data.ModelType='TeKaNeedle_T';
