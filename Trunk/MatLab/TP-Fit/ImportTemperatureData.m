@@ -86,7 +86,7 @@ else
         FileType='ADARA';
     elseif (strncmp(Line1,'origin:',6) && strncmp(Line2,'string:',6))
         FileType='DVTP';
-    elseif fLocateLine(fid,'CF-2 SERIAL NUMBER:')
+    elseif fLocateLine(fid,'CF-2 SERIAL NUMBER:','IssueError',false)
         FileType='SETP_PROTOTYPE';
     elseif strncmp(Line3,'# LoggerIdentifier',18)
         FileType='ANTARES';
