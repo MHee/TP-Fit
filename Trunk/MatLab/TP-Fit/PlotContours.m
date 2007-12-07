@@ -138,7 +138,14 @@ plot(Cnt.k(MinDiffT),Cnt.rc(MinDiffT)*1e-6,'kp',...
     'ButtonDownFcn','PlotContoursHandler(gcbo,gcf)');
 
 plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,...
-    'ko','MarkerFaceColor',[1 1 1],'Tag','Marker');    
+    'ko','MarkerFaceColor',[1 1 1],'Tag','Marker'); 
+
+% Report Best Fit to TP-Fit
+Res=MakeFit(UDat.Data,Cnt.k(minDevIdx),Cnt.rc(minDevIdx));
+if ishandle(UDat.hTPFit)
+    TPFit_Window('ReportResults',UDat.hTPFit,[],UDat.hTPFit,Res,UDat.hTPFit);
+end
+
 
 PlotMinCont(MinXDat,MinYDat);
     

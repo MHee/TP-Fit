@@ -86,6 +86,8 @@ else
         FileType='ADARA';
     elseif (strncmp(Line1,'origin:',6) && strncmp(Line2,'string:',6))
         FileType='DVTP';
+    elseif (strncmp(Line1,'origin:',6) && strcmpi(ext,'.dat'))
+        FileType='DVTP_RAW';
     elseif fLocateLine(fid,'CF-2 SERIAL NUMBER:','IssueError',false)
         FileType='SETP_PROTOTYPE';
     elseif strncmp(Line3,'# LoggerIdentifier',18)
@@ -118,6 +120,10 @@ switch upper(FileType)
         Data.t=OrigData.t;
     case {'DVTP'}
         OrigData=ImportDVTPData(FileName,'DoPlot',Opts.DoPlot);
+        Data.T=OrigData.T1;
+        Data.t=OrigData.t;
+    case {'DVTP_RAW'}
+        OrigData=ImportDVTPRawData(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.T1;
         Data.t=OrigData.t;
     case {'SETP_PROTOTYPE'}

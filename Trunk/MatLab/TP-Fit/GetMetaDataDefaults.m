@@ -26,11 +26,14 @@ MData.Hole='A';
 MData.Core='03';
 MData.CoreType='H';
 MData.Depth='??';
+MData.DepthError='??';
 MData.ToolID='???';
 MData.ToolType='APCT-3';
 MData.Operator='Martin Heesemann';
 MData.Initial_k='1';
 MData.Initial_rC='3.5e6';
+MData.TError='???';
+MData.DataQuality='Outstanding';
 MData.Comment='';
 
 if ~Opts.GetDefaults

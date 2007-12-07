@@ -219,6 +219,7 @@ Data=get(handles.TPFit,'UserData');
 Data=MakeContourInfo(Data);
 set(handles.TPFit,'UserData',Data);
 UpdateButtonColors(handles);
+Explore_Callback(hObject, eventdata, handles);
 
 % --- Executes on button press in Explore.
 function Explore_Callback(hObject, eventdata, handles)
@@ -284,40 +285,53 @@ TimeStampStr=sprintf('TP-Fit V%g: %s processed by %s   ',...
 
 MakeReport(Data,[FileBase '_Report.txt']);
 %get(gcf)
-h=OpenExtWindow(handles,'Results');
-hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
-%set(0,'CurrentFigure',h);figure(h);pause(2);
-%drawnow;
-%get(gcf,'Name')
-%gcf
-print('-f63001','-depsc','-painters',...  ,'-adobecset'
-    [FileBase '_Result.eps']);
+[h, ResultWindowIsNew]=OpenExtWindow(handles,'Results');
 
-print('-f63001','-dpng','-r300',...  ,'-adobecset'
-    [FileBase '_Result.png']);
+if ResultWindowIsNew
+    warndlg(['Result window is closed!!!    ',...
+        'Press "Show Fit" and run report again to include ',...
+        'plots of the Results in the output']);
+else
+    hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
+    %set(0,'CurrentFigure',h);figure(h);pause(2);
+    %drawnow;
+    %get(gcf,'Name')
+    %gcf
+    print('-f63001','-depsc','-painters',...  ,'-adobecset'
+        [FileBase '_Result.eps']);
 
-delete(hStmp);
+    print('-f63001','-dpng','-r300',...  ,'-adobecset'
+        [FileBase '_Result.png']);
 
-h=OpenExtWindow(handles,'Contours');
-hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
-%set(0,'CurrentFigure',h);figure(h);pause(2);
-%set(gcf,'Selected','on')
-%get(gcf,'Name')
-%get(gcf,'Selected')
-%gcf
-print('-f63002','-depsc','-painters',...  ,'-adobecset'
-    [FileBase '_Contours.eps']);
+    delete(hStmp);
+end
 
-print('-f63002','-dpng','-r300',...  ,'-adobecset'
-    [FileBase '_Contours.png']);
+[h, ContourWindowIsNew]=OpenExtWindow(handles,'Contours');
+if ContourWindowIsNew
+    warndlg(['Contour window is closed!!!    ',...
+        'Press "Explore" and run report again to include ',...
+        'plots of the Contours in the output']);
+else
+    hStmp=PlaceTimeStamp('PreStr',TimeStampStr);
+    %set(0,'CurrentFigure',h);figure(h);pause(2);
+    %set(gcf,'Selected','on')
+    %get(gcf,'Name')
+    %get(gcf,'Selected')
+    %gcf
+    print('-f63002','-depsc','-painters',...  ,'-adobecset'
+        [FileBase '_Contours.eps']);
 
-delete(hStmp);
+    print('-f63002','-dpng','-r300',...  ,'-adobecset'
+        [FileBase '_Contours.png']);
 
+    delete(hStmp);
+end
 
 function Extras_Callback(hObject, eventdata, handles)
 Extra=menu('Make a Choice',...
     'Data -> Workspace',...
     'WorkSpace -> Data',...
+    'External Data Plot',...
     'Screen dump',...
     'Application Info',...
     'Comment Window',...
@@ -340,10 +354,19 @@ switch Extra
             disp('Sorry not "Data" Structure in Workspace!!!');
         end
     case 3
+        % Plot Data in External Figure
+        hFig=figure;
+        figure(hFig);
+        Data=get(handles.TPFit,'UserData');
+        ImportTemperatureData(...
+            fullfile(Data.ImportInfo.DatPath,Data.ImportInfo.DatFile),...
+            'DoPlot',true);
+        
+    case 4
         % Screen Dump
         Data=get(handles.TPFit,'UserData');
         structree(Data);
-    case 4
+    case 5
         % Show Application info
         handles
         AppData=get(handles.Quit,'UserData')
@@ -351,13 +374,13 @@ switch Extra
         Settings=get(handles.Load,'UserData')
         assignin('base','Settings',Settings);
 
-    case 5
+    case 6
         % Show Comment Window
         h=OpenExtWindow(handles,'Comment')
 
-    case 6
-        SaveWindowPositions(handles)
     case 7
+        SaveWindowPositions(handles)
+    case 8
         % Launch Version Info
         ShowTPFitHelp;
 end
@@ -384,7 +407,7 @@ AppData.hWins=hWins;
 set(handles.Quit,'UserData',AppData);
 
 %% OpenExtWindow
-function h=OpenExtWindow(handles,WTitle)
+function [h,WindowIsNew]=OpenExtWindow(handles,WTitle)
 % Manages the external windows
 
 AppData=get(handles.Quit,'UserData');
@@ -396,13 +419,16 @@ hWins=AppData.hWins;
 Settings=get(handles.Load,'UserData');
 WinPos=Settings.WinPos;
 WinPaperPos=Settings.WinPaperPos;
-
+WindowIsNew=[];
 if isfield(hWins,WTitle)
     if ishandle(hWins.(WTitle))
         % Activate existing window
+        WindowIsNew=false;
+        
         figure(hWins.(WTitle));
     else
         % Create new Window
+        WindowIsNew=true;
         switch WTitle
             case 'Results'
                 hWins.Results=figure(63001);

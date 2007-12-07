@@ -5,7 +5,7 @@ Opts=ParseFunOpts(Opts,varargin);
 
 MData=Opts.Info;
 switch Data.ImportInfo.DataType
-    case 'DVTP'
+    case {'DVTP','DVTP_RAW'}
         MData.ToolType='DVTP';
     case 'SETP_PROTOTYPE'
         MData.ToolType='SETP';

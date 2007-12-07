@@ -84,7 +84,7 @@ plot(RefDat.t+Data.Res.tSfts(NSft),...
     'Color',[1 .7 .7],'LineWidth',5);
 
 
-if isfield(Data.OrigData,'T2')
+if (isfield(Data,'OrigData') && isfield(Data.OrigData,'T2'))
     plot(Data.tr, Data.OrigData.T2,'.-','Color',[.7 .7 1]);
 end
 plot(Data.tr, Data.T,'.-');
