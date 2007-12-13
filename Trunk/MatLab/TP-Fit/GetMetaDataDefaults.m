@@ -33,7 +33,7 @@ MData.Operator='Martin Heesemann';
 MData.Initial_k='1';
 MData.Initial_rC='3.5e6';
 MData.TError='???';
-MData.DataQuality='Outstanding';
+MData.DataQuality={'None',1};
 MData.Comment='';
 
 if ~Opts.GetDefaults

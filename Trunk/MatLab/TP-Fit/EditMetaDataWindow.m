@@ -22,7 +22,7 @@ function varargout = EditMetaDataWindow(varargin)
 
 % Edit the above text to modify the response to help EditMetaDataWindow
 
-% Last Modified by GUIDE v2.5 07-Dec-2007 01:44:20
+% Last Modified by GUIDE v2.5 13-Dec-2007 16:55:18
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -55,17 +55,57 @@ function EditMetaDataWindow_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for EditMetaDataWindow
 handles.output = hObject;
 
-% Update handles structure
-guidata(hObject, handles);
-
-% UIWAIT makes EditMetaDataWindow wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
+% Is set when figure is close without accepting data
+handles.Cancel=false; 
 
 % Load list of Data-Descriptions
 FileDir=fileparts(mfilename('fullpath'));
 DescList=textread(fullfile(FileDir,'DataDescriptions.lst'),'%s',...
     'commentstyle','shell','whitespace','\n');
 set(handles.QualitySelector,'String',DescList);
+
+% Populate Figure
+if mod(length(varargin),2)
+    % varargin is uneven (first parameter contains default meta-data)
+    MData=varargin{1};
+    handles.MData=MData;
+    
+    set(handles.ExpeditionEdit,'String',MData.Expedition);
+    set(handles.SiteEdit,'String',MData.Site);
+    set(handles.HoleEdit,'String',MData.Hole);
+    set(handles.CoreEdit,'String',MData.Core);
+    set(handles.CoreTypeEdit,'String',MData.CoreType);
+    set(handles.DepthEdit,'String',MData.Depth);
+    set(handles.DepthErrEdit,'String',MData.DepthError);
+    set(handles.ToolIDEdit,'String',MData.ToolID);
+    set(handles.ToolTypeText,'String',MData.ToolType);
+    set(handles.OperatorEdit,'String',MData.Operator);
+    set(handles.kEdit,'String',MData.Initial_k);
+    set(handles.rcEdit,'String',MData.Initial_rC);
+    set(handles.TErrEdit,'String',MData.TError);
+    set(handles.CommentEdit,'String',MData.Comment);
+    set(handles.ExpeditionEdit,'String',MData.Expedition);
+    
+    % Find the current data-description in the list
+    DescNo=find(strcmpi(MData.DataQuality{1},DescList));
+    if isempty(DescNo)
+        hWarn=warndlg('Could not find Data Quality value in list. Added value at bottom of list');
+        uiwait(hWarn);
+        DescNo=length(DescList)+1;
+        DescList{DescNo}=MData.DataQuality{1};
+        set(handles.QualitySelector,'String',DescList);
+    end    
+    set(handles.QualitySelector,'Value',DescNo);
+    
+else
+    handles.MData=[];
+end
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes EditMetaDataWindow wait for user response (see UIRESUME)
+% uiwait(handles.EditMetaDataWindow);
 
 
 % --- Outputs from this function are returned to the command line.
@@ -76,7 +116,7 @@ function varargout = EditMetaDataWindow_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
-varargout{1} = handles.output;
+varargout{1} = handles.output;  %handles.MData; 
 
 
 
@@ -107,14 +147,37 @@ function AcceptButton_Callback(hObject, eventdata, handles)
 % hObject    handle to AcceptButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+MData=handles.MData;
+    
+MData.Expedition=get(handles.ExpeditionEdit,'String');
+MData.Site=get(handles.SiteEdit,'String');
+MData.Hole=get(handles.HoleEdit,'String');
+MData.Core=get(handles.CoreEdit,'String');
+MData.CoreType=get(handles.CoreTypeEdit,'String');
+MData.Depth=get(handles.DepthEdit,'String');
+MData.DepthError=get(handles.DepthErrEdit,'String');
+MData.ToolID=get(handles.ToolIDEdit,'String');
+MData.ToolType=get(handles.ToolTypeText,'String');
+MData.Operator=get(handles.OperatorEdit,'String');
+MData.Initial_k=get(handles.kEdit,'String');
+MData.Initial_rC=get(handles.rcEdit,'String');
+MData.TError=get(handles.TErrEdit,'String');
+MData.Comment=get(handles.CommentEdit,'String');
+MData.Expedition=get(handles.ExpeditionEdit,'String');
+QualStrs=get(handles.QualitySelector,'String');
+QualNo=get(handles.QualitySelector,'Value');
+MData.DataQuality={QualStrs{QualNo},QualNo};
+% Update handles structure
+handles.MData=MData;
+guidata(hObject, handles);
+uiresume(handles.EditMetaDataWindow);
 
 % --- Executes on button press in CancelButton.
 function CancelButton_Callback(hObject, eventdata, handles)
 % hObject    handle to CancelButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+EditMetaDataWindow_CloseRequestFcn(handles.EditMetaDataWindow, eventdata, handles);
 
 % --- Executes on selection change in QualitySelector.
 function QualitySelector_Callback(hObject, eventdata, handles)
@@ -157,9 +220,9 @@ function ToolTypeText_CreateFcn(hObject, eventdata, handles)
 
 % Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
+% if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+%     set(hObject,'BackgroundColor','white');
+% end
 
 
 
@@ -368,7 +431,7 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-
+%function text13_CreateFcn(hObject, eventdata, handles)
 
 function TErrEdit_Callback(hObject, eventdata, handles)
 % hObject    handle to TErrEdit (see GCBO)
@@ -393,18 +456,18 @@ end
 
 
 
-function edit12_Callback(hObject, eventdata, handles)
-% hObject    handle to edit12 (see GCBO)
+function OperatorEdit_Callback(hObject, eventdata, handles)
+% hObject    handle to OperatorEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit12 as text
-%        str2double(get(hObject,'String')) returns contents of edit12 as a double
+% Hints: get(hObject,'String') returns contents of OperatorEdit as text
+%        str2double(get(hObject,'String')) returns contents of OperatorEdit as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit12_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit12 (see GCBO)
+function OperatorEdit_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to OperatorEdit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -443,5 +506,29 @@ function Compute_rc_Callback(hObject, eventdata, handles)
 % hObject    handle to Compute_rc (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+k=str2double(get(handles.kEdit,'String'));
+if isfinite(k)
+        % Set Initial_rC to \citet{Horai1985}
+        kappa=(3.657*k-0.70)*1e-7; % /10e7
+        set(handles.rcEdit,'String',sprintf('%.2g',k./kappa));
+else
+    warndlg('Enter a valid thermal conductivity first!!!');
+end
+
+
+
+% --- Executes when user attempts to close EditMetaDataWindow.
+function EditMetaDataWindow_CloseRequestFcn(hObject, eventdata, handles)
+% hObject    handle to EditMetaDataWindow (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: delete(hObject) closes the figure
+handles.Cancel=true;
+guidata(hObject,handles);
+uiresume(hObject);
+%delete(hObject);
+
+
 
 

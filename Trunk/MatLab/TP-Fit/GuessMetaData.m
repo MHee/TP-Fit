@@ -46,5 +46,6 @@ for i=1:length(Fields)
         MData.(Fields{i})='';
     end
 end
+MData.DataQuality={'None',1};
 
 Data.Info=MData;

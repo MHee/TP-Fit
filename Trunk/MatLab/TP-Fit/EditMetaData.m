@@ -16,34 +16,75 @@ end
 % Make sure Meta Data contains all fields that are defined in the defaults
 MData=ParseFunOpts(GetMetaDataDefaults('GetDefaults',Opts.GetDefaults),MData);
 
-FieldNames=fieldnames(MData);
-    
-NLines=ones(size(FieldNames));
-NLines(end)=5;
-
+hWin=EditMetaDataWindow(MData);
 DataOK=false;
-while ~DataOK
-    FieldContents=struct2cell(MData);
-    MDataChanged=inputdlg(FieldNames,'Edit Meta-Data',NLines,FieldContents);
-    if ~isempty(MDataChanged)
-        for i=1:length(FieldNames)
-            MData.(FieldNames{i})=MDataChanged{i};
-        end
+Cancel=false;
+while ~DataOK && ~Cancel
+    uiwait(hWin);
+    handles=guidata(hWin);
+    Cancel=handles.Cancel;
+    if ~Cancel
+        DataOK=CheckMetaData(handles.MData);
     end
-    
-    if ~isempty(MData.Initial_k) && isempty(MData.Initial_rC)
-        % Set Initial_rC to \citet{Horai1985}
-        k=str2double(MData.Initial_k);
-        kappa=(3.657*k-0.70)*1e-7; % /10e7
-        MData.Initial_rC=sprintf('%.2g',k./kappa);
-    end
-    
-    
-    DataOK=true;
-%     if length(str2num(MData.Depth))==1
-%         DataOK=true;
-%     else
-%         DataOK=false;
-%         warning('Depth must be a scalar number !!!');
-%     end
 end
+MData=handles.MData;
+delete(hWin);
+
+function DataOK=CheckMetaData(MData)
+DataOK=true;
+if ~isstruct(MData)
+    hWarn=warndlg('Something is wrong!!!');
+    DataOK=false;
+elseif ~isfinite(str2double(MData.Initial_k))
+    hWarn=warndlg('k has to be numeric!!!');
+    DataOK=false;    
+elseif ~isfinite(str2double(MData.Initial_rC))
+    hWarn=warndlg('rc has to be numeric!!!');
+    DataOK=false;    
+elseif ~isfinite(str2double(MData.Depth))
+    hWarn=warndlg('Depth has to be numeric!!!');
+    DataOK=false;        
+end
+
+if ~DataOK
+    uiwait(hWarn);
+end
+return
+
+
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Old Stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% FieldNames=fieldnames(MData);
+%     
+% NLines=ones(size(FieldNames));
+% NLines(end)=5;
+% 
+% DataOK=false;
+% while ~DataOK
+%     FieldContents=struct2cell(MData);
+%     MDataChanged=inputdlg(FieldNames,'Edit Meta-Data',NLines,FieldContents);
+%     if ~isempty(MDataChanged)
+%         for i=1:length(FieldNames)
+%             MData.(FieldNames{i})=MDataChanged{i};
+%         end
+%     end
+%     
+%     if ~isempty(MData.Initial_k) && isempty(MData.Initial_rC)
+%         % Set Initial_rC to \citet{Horai1985}
+%         k=str2double(MData.Initial_k);
+%         kappa=(3.657*k-0.70)*1e-7; % /10e7
+%         MData.Initial_rC=sprintf('%.2g',k./kappa);
+%     end
+%     
+%     
+%     DataOK=true;
+% %     if length(str2num(MData.Depth))==1
+% %         DataOK=true;
+% %     else
+% %         DataOK=false;
+% %         warning('Depth must be a scalar number !!!');
+% %     end
+% end
