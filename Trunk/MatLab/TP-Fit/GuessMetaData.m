@@ -1,9 +1,21 @@
 function Data=GuessMetaData(Data,varargin)
 
 Opts.Info=GetMetaDataDefaults;
+Opts.GuessFromFileName=false;
 Opts=ParseFunOpts(Opts,varargin);
 
 MData=Opts.Info;
+
+% Set defaults that should not be over-riden
+MData.DataQuality='None';
+MData.DataQualityNo='1';
+MData.Depth='NaN';
+MData.Initial_k='1';
+MData.Initial_rC='3.4e6';
+MData.Core='??';
+MData.ToolID='';
+MData.ToolType='';
+
 switch Data.ImportInfo.DataType
     case {'DVTP','DVTP_RAW'}
         MData.ToolType='DVTP';
@@ -15,6 +27,7 @@ switch Data.ImportInfo.DataType
         MData.ToolID=Data.OrigData.LoggerID;
     case 'ADARA'
         MData.ToolType='APCT';
+        MData.ToolID=Data.OrigData.Info.ToolID;
     case 'TPFIT_RES'
         MData.ToolType='APCT';
         Data.Picks.t0=Data.t(Data.OrigData.Picks.r0);
@@ -30,13 +43,16 @@ switch Data.ImportInfo.DataType
         return
 end
 
-MData.Site=num2str(sscanf(Data.ImportInfo.DatFile,'%d'));
-MData.Hole=upper(char(sscanf(Data.ImportInfo.DatFile,'%*d%1c%*d%*c')));
-MData.Core=num2str(sscanf(Data.ImportInfo.DatFile,'%*d%*1c%d%*1c'),'%02.0f');
-MData.CoreType=upper(char(sscanf(Data.ImportInfo.DatFile,'%*d%*1c%*d%1c')));
-if strcmp(MData.CoreType,'.')
-    MData.CoreType='';
+if Opts.GuessFromFileName
+    MData.Site=num2str(sscanf(Data.ImportInfo.DatFile,'%d'));
+    MData.Hole=upper(char(sscanf(Data.ImportInfo.DatFile,'%*d%1c%*d%*c')));
+    MData.Core=num2str(sscanf(Data.ImportInfo.DatFile,'%*d%*1c%d%*1c'),'%02.0f');
+    MData.CoreType=upper(char(sscanf(Data.ImportInfo.DatFile,'%*d%*1c%*d%1c')));
+    if strcmp(MData.CoreType,'.')
+        MData.CoreType='';
+    end
 end
+
 
 % Make shure everything is a string to avoid errors if anything sneaks in
 % through the defaults...
@@ -46,6 +62,7 @@ for i=1:length(Fields)
         MData.(Fields{i})='';
     end
 end
-MData.DataQuality={'None',1};
+
+
 
 Data.Info=MData;

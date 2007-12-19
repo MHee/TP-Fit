@@ -21,19 +21,20 @@ Opts=ParseFunOpts(Opts,varargin);
 % See also GuessMetaData
 
 MData.Expedition='???';
-MData.Site='1200';
-MData.Hole='A';
-MData.Core='03';
-MData.CoreType='H';
+MData.Site='????';
+MData.Hole='?';
+MData.Core='??';
+MData.CoreType='?';
 MData.Depth='??';
 MData.DepthError='??';
 MData.ToolID='???';
-MData.ToolType='APCT-3';
+MData.ToolType='????';
 MData.Operator='Martin Heesemann';
 MData.Initial_k='1';
-MData.Initial_rC='3.5e6';
-MData.TError='???';
-MData.DataQuality={'None',1};
+MData.Initial_rC='3.4e6';
+MData.TError='??';
+MData.DataQuality='None';
+MData.DataQualityNo=1;
 MData.Comment='';
 
 if ~Opts.GetDefaults

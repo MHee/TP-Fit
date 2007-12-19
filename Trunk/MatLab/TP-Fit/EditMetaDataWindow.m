@@ -84,10 +84,9 @@ if mod(length(varargin),2)
     set(handles.rcEdit,'String',MData.Initial_rC);
     set(handles.TErrEdit,'String',MData.TError);
     set(handles.CommentEdit,'String',MData.Comment);
-    set(handles.ExpeditionEdit,'String',MData.Expedition);
     
     % Find the current data-description in the list
-    DescNo=find(strcmpi(MData.DataQuality{1},DescList));
+    DescNo=find(strcmpi(MData.DataQuality,DescList));
     if isempty(DescNo)
         hWarn=warndlg('Could not find Data Quality value in list. Added value at bottom of list');
         uiwait(hWarn);
@@ -154,7 +153,7 @@ MData.Site=get(handles.SiteEdit,'String');
 MData.Hole=get(handles.HoleEdit,'String');
 MData.Core=get(handles.CoreEdit,'String');
 MData.CoreType=get(handles.CoreTypeEdit,'String');
-MData.Depth=get(handles.DepthEdit,'String');
+MData.Depth=num2str(str2double(get(handles.DepthEdit,'String')));
 MData.DepthError=get(handles.DepthErrEdit,'String');
 MData.ToolID=get(handles.ToolIDEdit,'String');
 MData.ToolType=get(handles.ToolTypeText,'String');
@@ -162,11 +161,14 @@ MData.Operator=get(handles.OperatorEdit,'String');
 MData.Initial_k=get(handles.kEdit,'String');
 MData.Initial_rC=get(handles.rcEdit,'String');
 MData.TError=get(handles.TErrEdit,'String');
-MData.Comment=get(handles.CommentEdit,'String');
+MData.Comment=cellstr(get(handles.CommentEdit,'String'));
+% Make shure no " is in Comment
+MData.Comment=strrep(MData.Comment,'"','''');
 MData.Expedition=get(handles.ExpeditionEdit,'String');
 QualStrs=get(handles.QualitySelector,'String');
 QualNo=get(handles.QualitySelector,'Value');
-MData.DataQuality={QualStrs{QualNo},QualNo};
+MData.DataQuality=QualStrs{QualNo};
+MData.DataQualityNo=num2str(QualNo);
 % Update handles structure
 handles.MData=MData;
 guidata(hObject, handles);
@@ -178,6 +180,8 @@ function CancelButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 EditMetaDataWindow_CloseRequestFcn(handles.EditMetaDataWindow, eventdata, handles);
+%pause(1)
+%delete(handles.EditMetaDataWindow);
 
 % --- Executes on selection change in QualitySelector.
 function QualitySelector_Callback(hObject, eventdata, handles)
@@ -524,10 +528,15 @@ function EditMetaDataWindow_CloseRequestFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: delete(hObject) closes the figure
-handles.Cancel=true;
-guidata(hObject,handles);
-uiresume(hObject);
-%delete(hObject);
+if handles.Cancel
+    % Cancel was hit already, close now
+    delete(hObject);
+else
+    handles.Cancel=true;
+    guidata(hObject,handles);
+    uiresume(hObject);
+    set(hObject,'WindowStyle','normal');
+end
 
 
 

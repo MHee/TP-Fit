@@ -109,8 +109,14 @@ if (isstruct(Data) && ~isempty(Data))
     Settings.CurrentFile=FileName;
     
     if ~isfield(Data,'Info')
-        Settings.Info;
         Data=GuessMetaData(Data,'Info',Settings.Info);
+        
+        [DatPath,DatBaseName]=fileparts(FileName);
+        MetaFile=fullfile(DatPath,[DatBaseName '.meta']);
+        if exist(MetaFile,'file')
+            MData=ReadMetaFile(MetaFile);
+            Data.Info=ParseFunOpts(Data.Info,MData);
+        end
         %Data.Info;
     end
 
@@ -148,6 +154,7 @@ end
 function EditMetaData_Callback(hObject, eventdata, handles)
 Data=get(handles.TPFit,'UserData');
 Settings=get(handles.Load,'UserData');
+[Dummy,DatFileName]=fileparts(Settings.CurrentFile);
 
 if isempty(Data)
     msgbox('Load data first!!!','','warn');
@@ -157,9 +164,9 @@ if isfield(Data,'Info')
     %     if ~isfield(Data.Info,'Core')
     %         Data=GuessMetaData(Data);
     %     end
-    Data.Info=EditMetaData(Data.Info);
+    Data.Info=EditMetaData(Data.Info,'DatFileName',DatFileName);
 else
-    Data.Info=EditMetaData;
+    Data.Info=EditMetaData('DatFileName',DatFileName);
 end
 
 if isfield(Data,'Picks')
@@ -276,14 +283,33 @@ SaveSession(Data,Settings.CurrentFile);
 function Report_Callback(hObject, eventdata, handles)
 Data=get(handles.TPFit,'UserData');
 Settings=get(handles.Load,'UserData');
+assignin('base','Data',Data);
+assignin('base','Settings',Settings);
 
-[RPath,RBase]=fileparts(Settings.CurrentFile);
-FileBase=fullfile(RPath,RBase);
+% Report is written in the same directory as the file that was loaded,
+% which could be a report file but the file base is taken from the initial
+% raw-data file.
+[RPath,RBase]=fileparts(Data.ImportInfo.DatFile); % File basename from *.dat
+RPath=fileparts(Settings.CurrentFile); % Disk location from current open file
+FileBase=fullfile(RPath,RBase); % Path and basename without extension
+
+ReportSessionFile=[FileBase '_ReportSession.mat'];
+if exist(ReportSessionFile,'file')
+    QAns=questdlg('Overwrite existing report?',...
+        'Report already exist!','Yes','No','No');
+    if strcmp(QAns,'No')
+        % Don't do anything
+        return;
+    end
+end
+
+save(ReportSessionFile,'Data');
 
 TimeStampStr=sprintf('TP-Fit V%g: %s processed by %s   ',...
     Data.TPFitInfo.Version,Data.ImportInfo.DatFile, Data.Info.Operator);
 
 MakeReport(Data,[FileBase '_Report.txt']);
+
 %get(gcf)
 [h, ResultWindowIsNew]=OpenExtWindow(handles,'Results');
 
@@ -326,6 +352,8 @@ else
 
     delete(hStmp);
 end
+ConvertReport([FileBase '_Report.txt'],'Format','html');
+
 
 function Extras_Callback(hObject, eventdata, handles)
 Extra=menu('Make a Choice',...

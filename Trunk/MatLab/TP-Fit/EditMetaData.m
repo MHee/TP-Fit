@@ -2,6 +2,7 @@ function MData=EditMetaData(varargin)
 % Edit the Meta-Data that is used and stored in TP-Fit data
 
 Opts.GetDefaults=true;
+Opts.DatFileName='';
 [Opts, unusedOpts]=ParseFunOpts(Opts,varargin);
 
 if length(unusedOpts)==1
@@ -20,6 +21,9 @@ hWin=EditMetaDataWindow(MData);
 DataOK=false;
 Cancel=false;
 while ~DataOK && ~Cancel
+    set(hWin,...
+        'WindowStyle','modal',...
+        'Name',['Basename: ' Opts.DatFileName]);
     uiwait(hWin);
     handles=guidata(hWin);
     Cancel=handles.Cancel;
@@ -42,8 +46,8 @@ elseif ~isfinite(str2double(MData.Initial_rC))
     hWarn=warndlg('rc has to be numeric!!!');
     DataOK=false;    
 elseif ~isfinite(str2double(MData.Depth))
-    hWarn=warndlg('Depth has to be numeric!!!');
-    DataOK=false;        
+    hWarn=warndlg('You did not enter a depth!','Warning...','modal');
+    DataOK=true;        
 end
 
 if ~DataOK
