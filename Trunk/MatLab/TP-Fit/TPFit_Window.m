@@ -204,17 +204,25 @@ function Fit_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 Data=get(handles.TPFit,'UserData');
-OpenExtWindow(handles,'Results');
+hResults=OpenExtWindow(handles,'Results');
 clf;
 %set(gcf,...
 %    'Position',[5 82 773 899],...   [5 381 1000 600],...
 %    'PaperPosition',[0.6345 0.6345 19.7150 28.4084]); %[0.6 3.3 28.4 17]
 
-if ~isfield(Data,'Res')
+
+if isfield(Data,'Contour')
+    OpenExtWindow(handles,'Contours');
+    clf;
+    PlotContours(Data,'hResults',hResults,'hTPFit',handles.TPFit,...
+        'k',str2double(Data.Info.Initial_k),...
+        'rc',str2double(Data.Info.Initial_rC));
+elseif ~isfield(Data,'Res')
     [Res,Data]=MakeFit(Data,str2num(Data.Info.Initial_k),str2num(Data.Info.Initial_rC));
+    PlotFitResults(Data,'hTPFit',handles.TPFit);
+    set(handles.TPFit,'UserData',Data);
 end
-PlotFitResults(Data,'hTPFit',handles.TPFit);
-set(handles.TPFit,'UserData',Data);
+
 figure(handles.TPFit);
 
 % --- Executes on button press in contours.

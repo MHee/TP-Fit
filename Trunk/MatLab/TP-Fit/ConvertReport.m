@@ -1,4 +1,4 @@
-function out=ConvertReport(ReportName,varargin)
+function ConvertReport(ReportName,varargin)
 % CONVERTREPORT   Converts a TP-Fit report to a different file format
 %   Valid file formats are [{html}|latex|text].
 %   

@@ -1,13 +1,21 @@
 function PlotContours(Data,varargin)
 %Create contour plot for TP-Fit that is used for data exploring
 
-Opts.hResults=[];
-Opts.hTPFit=[];
-[Opts, noOpt]=ParseFunOpts(Opts,varargin);
 
 Cnt=Data.Contour;
 %[minDev,minDevIdx]=min(Cnt.StdDev(:));
 [minDev,minDevIdx]=min(Cnt.NLSqr(:));
+
+Opts.hResults=[];
+Opts.hTPFit=[];
+
+% Start with best fitting defaults
+Opts.k=Cnt.k(minDevIdx);
+Opts.rc=Cnt.rc(minDevIdx);
+
+[Opts, noOpt]=ParseFunOpts(Opts,varargin);
+
+Opts
 
 hResults=Opts.hResults;
 
@@ -18,7 +26,7 @@ if ishandle(hResults)
     UDat.hTPFit=Opts.hTPFit;
     set(gcf,'UserData',UDat);
     set(gcf,'Pointer','fullcrosshair');
-    [Res,Data]=MakeFit(UDat.Data,Cnt.k(minDevIdx),Cnt.rc(minDevIdx));
+    [Res,Data]=MakeFit(UDat.Data,Opts.k,Opts.rc);
     hFig=gcf;
     figure(hResults);
     PlotFitResults(Data);
@@ -51,7 +59,7 @@ plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,...
     'kp','MarkerFaceColor','r','MarkerSize',12,...
         'ButtonDownFcn','PlotContoursHandler(gcbo,gcf)');
 
-plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,...
+plot(Opts.k,Opts.rc*1e-6,...
     'ko','MarkerFaceColor',[1 1 1],'Tag','Marker');    
 
 text(0.98,0.98,...
@@ -85,7 +93,7 @@ plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,'kp',...
     'MarkerFaceColor','r','MarkerSize',12,...
     'ButtonDownFcn','PlotContoursHandler(gcbo,gcf)');
 
-plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,...
+plot(Opts.k,Opts.rc*1e-6,...
     'ko','MarkerFaceColor',[1 1 1],'Tag','Marker');    
     
 PlotMinCont(MinXDat,MinYDat);    
@@ -109,7 +117,7 @@ plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,'kp','MarkerFaceColor','r',...
     'MarkerSize',12,...
     'ButtonDownFcn','PlotContoursHandler(gcbo,gcf)');
 
-plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,...
+plot(Opts.k,Opts.rc*1e-6,...
     'ko','MarkerFaceColor',[1 1 1],'Tag','Marker');    
 
 PlotMinCont(MinXDat,MinYDat);    
@@ -137,11 +145,11 @@ plot(Cnt.k(MinDiffT),Cnt.rc(MinDiffT)*1e-6,'kp',...
     'MarkerFaceColor','r','MarkerSize',12,...
     'ButtonDownFcn','PlotContoursHandler(gcbo,gcf)');
 
-plot(Cnt.k(minDevIdx),Cnt.rc(minDevIdx)*1e-6,...
+plot(Opts.k,Opts.rc*1e-6,...
     'ko','MarkerFaceColor',[1 1 1],'Tag','Marker'); 
 
 % Report Best Fit to TP-Fit
-Res=MakeFit(UDat.Data,Cnt.k(minDevIdx),Cnt.rc(minDevIdx));
+Res=MakeFit(UDat.Data,Opts.k,Opts.rc);
 if ishandle(UDat.hTPFit)
     TPFit_Window('ReportResults',UDat.hTPFit,[],UDat.hTPFit,Res,UDat.hTPFit);
 end
