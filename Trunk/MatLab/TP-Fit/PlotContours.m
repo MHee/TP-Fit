@@ -15,8 +15,6 @@ Opts.rc=Cnt.rc(minDevIdx);
 
 [Opts, noOpt]=ParseFunOpts(Opts,varargin);
 
-Opts
-
 hResults=Opts.hResults;
 
 %if exist('hResults','var')

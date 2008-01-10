@@ -46,7 +46,7 @@ end
 
 function PickWindowPlot(handles)
 Data=get(handles.figure1,'UserData');
-Pos=[.07 .12 .7 .85];
+%Pos=[.07 .12 .7 .85];
 Data.Picks.UsedDat=find( ( (Data.tr>=Data.Picks.Window(1))&(Data.tr<=Data.Picks.Window(2))));
 
 axes(handles.t_axes);
@@ -67,6 +67,10 @@ patch([XLim(2) XLim(2) Data.Picks.Window(2) Data.Picks.Window(2)],...
 
 plot([0 0],YLim,'k--','LineWidth',1.5);
 hold on;
+
+if (isfield(Data,'OrigData') && isfield(Data.OrigData,'T2'))
+    plot(Data.tr, Data.OrigData.T2,'.-','Color',[.7 .7 1]);
+end
 plot(Data.tr,Data.T,'.-');
 
 %plot(Data.tr(Data.Picks.UsedDat),Data.T(Data.Picks.UsedDat),'g.');
@@ -78,12 +82,66 @@ set(handles.t_axes,...
     'XMinorTick','on',...
     'YMinorTick','on',...
     'Layer','top',...
-    'TickDir','out',...
-    'Position',Pos);
+    'XAxisLocation','top',...
+    ...'Position',Pos,...
+    'TickDir','out');
 grid on;
-xlabel('Time after penetration (s)');
 ylabel('Temperature (°C)');
+
+axes(handles.deriv_axes);
+cla;
+set(gca,'YScale','log');
+hold on;
+
+YLim=[1e-5 1e3];
+patch([XLim(1) XLim(1) Data.Picks.Window(1) Data.Picks.Window(1)],...
+    [YLim fliplr(YLim)],...
+    .9*[1 1 1],...
+    'EdgeColor','none');
+patch([XLim(2) XLim(2) Data.Picks.Window(2) Data.Picks.Window(2)],...
+    [YLim fliplr(YLim)],...
+    .9*[1 1 1],...
+    'EdgeColor','none');
+
+
+Dt=diff(Data.tr);
+
+t=Data.tr(1)+cumsum(Dt)-0.5*Dt;
+DT=diff(Data.T)./Dt;
+AvDT=MovingAverage(DT);
+Av_t=MovingAverage(t);
+semilogy(Av_t,abs(AvDT),'g-','LineWidth',6);
+semilogy([0 0],YLim,'k--','LineWidth',1.5);
+hold on;
+
+Pos=find((DT>0));
+Neg=find((DT<0));
+semilogy(t(Pos),DT(Pos),'r.');
+semilogy(t(Neg),-DT(Neg),'b.');
+%semilogy(t,abs(DT),'k:');
+xlabel('Time (s)');
+ylabel('Temperatuer change (°C/s)');
+
+set(handles.deriv_axes,...
+    'XLim',XLim,...
+    'YLim',[1e-5 Inf],...
+    'XMinorTick','on',...
+    'YMinorTick','on',...
+    'Layer','top',...
+    'Box','on',...
+    'XAxisLocation','bottom',...
+    ...'Position',Pos,...
+    'TickDir','out');
+xlabel('Time after penetration (s)');
+grid on
 set(handles.figure1,'UserData',Data);
+
+function y=MovingAverage(x)
+m=5;
+n=length(x);
+z = [0 cumsum(x(:)')];
+y = ( z(m+1:n+1) - z(1:n-m+1) ) / m;
+
 
 function AfterZoom(hFig,evd)
 
@@ -120,14 +178,16 @@ set(handles.Operator,'String',Data.Info.Operator);
 Data.tr=Data.t-Data.Picks.t0;
 set(handles.figure1,'UserData',Data);
 
-Pos=[.07 .12 .7 .8];
+%Pos=[.07 .12 .7 .8];
 axes(handles.t_axes);
 set(handles.t_axes,...
     'TickDir','out',...
+    'XAxisLocation','top',...
+    'Box','on',...
     'Layer','top',...
     'XMinorTick','on',...
-    'YMinorTick','on',...
-    'Position',Pos);
+    ...'Position',Pos,...
+    'YMinorTick','on');
 if (isfield(Data.Session,'XLim') & isfield(Data.Session,'YLim'));
     set(handles.t_axes,...
         'XLim',Data.Session.XLim,...
@@ -137,6 +197,7 @@ end
 xlabel('t (s)');
 ylabel('T (°C)');
 
+linkaxes([handles.t_axes,handles.deriv_axes],'x');
 
 PickWindowPlot(handles);
 %axis auto

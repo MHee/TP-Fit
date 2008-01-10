@@ -38,7 +38,20 @@ tr_exe=fullfile(fileparts(mfilename('fullpath')),'ReportConverter','tr.exe');
 
 [RPath,RBaseName]=fileparts(ReportName);
 ReportBase=fullfile(RPath,RBaseName);
-%[tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe '> ' ReportBase '.html']
-system([tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe '> ' ReportBase '.html']);
 
-winopen([ReportBase '.html'])
+%ConvCommand=[tr_exe ' "\t" "|" < "' ReportName '" | ' nme_exe ' >"' ReportBase '.html"'];
+%ConvCommand=[tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe ' >' ReportBase '.html'];
+system([tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe '> ' ReportBase '.html']);
+return
+
+
+[ConversionError,ConvMessage]=system(ConvCommand);
+
+if ConversionError
+    warning('Conversion command\n%s\nfailed',ConvCommand);
+    %fprintf('%s\n',ConvMessage);
+else
+    winopen([ReportBase '.html']);
+end
+fprintf('%s\n',ConvCommand);
+fprintf('%s\n',ConvMessage);
