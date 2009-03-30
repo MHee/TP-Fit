@@ -31,7 +31,7 @@ for i=1:N
     Diff=Data.T(UsedDat)-polyval(Fit(i,1:2),SDat.T(i,:))';
     StdDev(i)=std(Diff);
     
-    NLSqr(i)=sqrt((Diff(:)'*Diff(:))/(length(Diff)-1));
+    NLSqr(i)=sqrt((Diff(:)'*Diff(:))/(length(Diff)));
 end
 [dummy,Res.BestSft]=min(StdDev);
 Res.T=SDat.T;
