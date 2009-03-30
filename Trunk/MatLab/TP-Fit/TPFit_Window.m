@@ -372,7 +372,9 @@ Extra=menu('Make a Choice',...
     'Application Info',...
     'Comment Window',...
     'Save Window Positions',...
-    'Launch Help');
+    'Launch Help',...
+    'Use k=1 1D APCT model',...
+    'Compute contours (tSft=0s)');
 
 
 switch Extra
@@ -419,6 +421,19 @@ switch Extra
     case 8
         % Launch Version Info
         ShowTPFitHelp;
+    case 9
+        % Set Model Type to old 1D Reference model works only for k=1
+        Data=get(handles.TPFit,'UserData');
+        Data.ModelType='OldAPCT_T';
+        warning('Changed Reference model to Old 1D APCT (k=1) !!!!');
+        set(handles.TPFit,'UserData',Data);
+    case 10
+        Data=get(handles.TPFit,'UserData');
+        Data=MakeContourInfo(Data,'tSft',0);
+        set(handles.TPFit,'UserData',Data);
+        UpdateButtonColors(handles);
+        Explore_Callback(hObject, eventdata, handles);
+
 end
 
 
