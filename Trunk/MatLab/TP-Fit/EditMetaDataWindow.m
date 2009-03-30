@@ -512,7 +512,7 @@ function Compute_rc_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 k=str2double(get(handles.kEdit,'String'));
 if isfinite(k)
-        % Set Initial_rC to \citet{Horai1985}
+        % Set Initial_rC to \citet{Herzen1959}
         kappa=(3.657*k-0.70)*1e-7; % /10e7
         set(handles.rcEdit,'String',sprintf('%.2g',k./kappa));
 else

@@ -25,7 +25,7 @@ Opts=ParseFunOpts(Opts,varargin);
 
 if ~exist('k','var')
     k=1;
-    rc=3.5e6;
+    rc=3.4e6;
 end
 
 if isempty(Opts.M)

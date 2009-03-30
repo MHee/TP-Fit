@@ -55,6 +55,8 @@ else
             ModelFile='DVTP_TModels.mat';
         case 'TeKaNeedle_T'
             ModelFile='TeKaNeedle_TModels.mat';
+        case 'OldAPCT_T'
+            ModelFile='APCT_1D_TModel.mat';
         otherwise
             error(['Bad model type: ' ModelType]);
     end

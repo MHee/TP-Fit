@@ -1,4 +1,7 @@
-function Data=MakeContourInfo(Data)
+function Data=MakeContourInfo(Data,varargin)
+
+Opts.tSft=[]; % leave empty to optimize tSft or supply fixed tSft
+[Opts,M]=ParseFunOpts(Opts,varargin);
 
 M=LoadModel(Data.ModelType); % load('DecayMatrix.mat');
 
@@ -16,7 +19,7 @@ Contour.Tf_1_3=zeros(Ni,Nj);
 h = waitbar(0,'Please wait...');
 for i=1:Ni
     for j=1:Nj
-        Res=MakeOptimFit(Data,M.ks(i),M.rcs(j),M);
+        Res=MakeOptimFit(Data,M.ks(i),M.rcs(j),M,'tSft',Opts.tSft); % ,'tSft',0
         Contour.k(i,j)=M.ks(i);
         Contour.rc(i,j)=M.rcs(j);
         Contour.BestSft(i,j)=Res.BestSft;
