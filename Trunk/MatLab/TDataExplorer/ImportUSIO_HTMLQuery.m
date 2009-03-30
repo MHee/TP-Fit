@@ -57,7 +57,7 @@ switch Opts.Type
         Data.T=AllDat{9};
         Data.z=AllDat{7};
     case 'tcondat'
-        AllDat=textscan(ASCIIData,'%s %s %s %s %s %f %f %f %f %s %f %s %s %s',...
+        AllDat=textscan(ASCIIData,'%s %s %s %s %s %s %f %f %f %s %f %s %s %s',...
             'delimiter','\t',...
             'headerLines',1);
 
@@ -69,6 +69,39 @@ switch Opts.Type
         Data.ToolName=AllDat{12};
         Data.k=AllDat{11};
         Data.z=AllDat{9};
+    case 'maddat'
+        AllDat=textscan(ASCIIData,'%s %s %s %s %s %s %f %f %f %f %f %f %f %f %f %f %s %s',...
+            'delimiter','\t',...
+            'headerLines',1);
+
+        Data.Leg=AllDat{1};
+        Data.Site=AllDat{2};
+        Data.Hole=AllDat{3};
+        Data.Core=AllDat{4};
+        Data.CoreType=AllDat{5};
+        Data.z=AllDat{9};
+        Data.WW=AllDat{10};
+        Data.WD=AllDat{11};
+        Data.BulkDens=AllDat{12};
+        Data.DryDens=AllDat{13};
+        Data.GrainDens=AllDat{14};
+        Data.Poro=AllDat{15};
+        Data.VR=AllDat{16};
+        Data.Method=AllDat{17};
+        Data.Comments=AllDat{18};
+    case 'pwldat'
+        AllDat=textscan(ASCIIData,'%s %s %s %s %s %s %f %f %f',...
+            'delimiter','\t',...
+            'headerLines',1);
+
+        Data.Leg=AllDat{1};
+        Data.Site=AllDat{2};
+        Data.Hole=AllDat{3};
+        Data.Core=AllDat{4};
+        Data.CoreType=AllDat{5};
+        Data.z=AllDat{8};
+        Data.vp=AllDat{9};
+        
     otherwise
         Data=[];
         waring('ImportUSIO:UnknownType',...
