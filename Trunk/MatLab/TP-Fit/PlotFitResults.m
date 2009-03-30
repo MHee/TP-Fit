@@ -200,8 +200,12 @@ hFitWin=semilogy(Data.Picks.Window,StdWinDiff*[1 1],'k--','LineWidth',2);
 
 hold on
 
-hNeg=semilogy(tDiff(Neg),-Diff(Neg),'o','MarkerFaceColor','w','MarkerSize',4);
-hPos=semilogy(tDiff(Pos),Diff(Pos),'.','MarkerSize',12); %,'MarkerFaceColor','b'
+%hNeg=semilogy(tDiff(Neg),-Diff(Neg),'o','MarkerFaceColor','w','MarkerSize',4);
+%hPos=semilogy(tDiff(Pos),Diff(Pos),'.','MarkerSize',12); %,'MarkerFaceColor','b'
+
+hNeg=semilogy(tDiff(Neg),-Diff(Neg),'bv','MarkerFaceColor','b','MarkerSize',4);
+hPos=semilogy(tDiff(Pos),Diff(Pos),'r^','MarkerFaceColor','r','MarkerSize',4); %,'MarkerFaceColor','b'
+
 
 %Plot selection markers
 plot(tDiff(Data.Picks.UsedDat(1)-InModel(1)+1), abs(Diff(Data.Picks.UsedDat(1)-InModel(1)+1)),'k^','LineWidth',1.5);
@@ -220,12 +224,11 @@ set(gca,...
     'XLim',get(hDat,'XLim'),...
     'YLim',YLim);
 xlabel('Time after penetration (s)');
-ylabel('Temperature residual (°C)');
+%ylabel('Temperature residual \epsilon_T + T_e \epsilon_\Theta (°C)');
+ylabel('Temperature residual \epsilon (°C)');
 grid on
-legend([hPos,hNeg,hFitWin],{'Data above model','Data below model','Standart deviation'},...
+legend([hPos,hNeg,hFitWin],{'Data above model','Data below model','\epsilon_{RMS}'},...
     'Location','North'); % 'Best'
-
-
 
 
 
@@ -238,9 +241,9 @@ xx=[0 max(Res.T(NSft,:))];
 yy=polyval(Res.PartFit(NSft,:),xx);
 yy1=polyval(Res.Fit(NSft,:),xx);
 
-hAll=plot(xx,yy1,'--','Color',[1 .7 .7],'LineWidth',1.5);
+hAll=plot(xx,yy1,'-','Color',[1 .7 .7],'LineWidth',1.5);
 hold on;
-hPart=plot(xx,yy,'k:');
+hPart=plot(xx,yy,'k-');
 hTAll=plot(xx(1),yy1(1),'ko','MarkerFaceColor',[1 .7 .7]);
 %hTPart=plot(xx(1),yy(1),'ko','MarkerFaceColor','r','MarkerSize',5);
 hTPart=plot(xx(1),yy(1),'k.');
@@ -265,9 +268,11 @@ set(gca,...
 %text(0.02,0.8,sprintf('%.2f°C',yy1(1)),'Units','normalized','Color','g');
 %text(0.02,0.7,sprintf('%.2f°C',yy(1)),'Units','normalized','Color','r');
 legend([hTAll hTPart hAll,hPart],...
-    {sprintf('%.2f°C',yy1(1)), sprintf('%.2f°C',yy(1)),'Complete','1/3 window'},...
+    {sprintf('%.2f°C',yy1(1)), sprintf('%.2f°C',yy(1)),'1/1 window','1/3 window'},...
     'Location','SouthEast'); %'Best'
+
 xlabel('Reference Model');
+%xlabel('\sffamily Reference model $\tilde{\Theta}(t-t_{Sft})$','Interpreter','latex')
 ylabel('Measured temperature (°C)');
 
 %
@@ -278,7 +283,7 @@ plot(Res.tSfts,Res.StdDev,'k.-')
 hold on
 plot(Res.tSfts(NSft),Res.StdDev(NSft),'o');
 xlabel('Time-shift (s)');
-ylabel('Std (°C)');
+ylabel('\epsilon_{RMS} (°C)');
 set(gca,...
     'Layer','top',...
     'Box','on',...
@@ -290,7 +295,7 @@ set(gca,...
 
 grid on;
 hTxt=text(0.04,0.95,...
-    sprintf('k= %.2f (W/(m K)\n\\rhoC= %.2f (MJ/(m³ K)\nTime-shift= %.1f s\nStd= %.1f (mK)',...
+    sprintf('k= %.2f (W/(m K)\n\\rhoC= %.2f (MJ/(m³ K)\ntime-shift= %.1f s\n\\epsilon_{RMS}= %.1f (mK)',...
     Data.Res.k,Data.Res.rc*1e-6,Res.tSfts(NSft),Res.StdDev(NSft)*1e3),...
     'Units','normalized',...
     'VerticalAlignment','top',...
