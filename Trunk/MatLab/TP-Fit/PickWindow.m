@@ -428,6 +428,11 @@ function PrintMenuItem_Callback(hObject, eventdata, handles)
 % hObject    handle to PrintMenuItem (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+Data=get(handles.figure1,'UserData');
+set(gcf,...
+    'PaperType','A4',...
+    'PaperPosition',[4 4 18 1/sqrt(2)*18])
+print('-depsc','-noui',[Data.Info.Hole Data.Info.Core Data.Info.CoreType '_Pick.eps']);
 
 
 % --------------------------------------------------------------------
