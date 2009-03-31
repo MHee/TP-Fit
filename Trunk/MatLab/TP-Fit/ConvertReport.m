@@ -41,7 +41,9 @@ ReportBase=fullfile(RPath,RBaseName);
 
 %ConvCommand=[tr_exe ' "\t" "|" < "' ReportName '" | ' nme_exe ' >"' ReportBase '.html"'];
 %ConvCommand=[tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe ' >' ReportBase '.html'];
-system([tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe '> ' ReportBase '.html']);
+[tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe ' >' ReportBase '.html']
+
+system([tr_exe ' "\t" "|" <' ReportName ' | ' nme_exe ' >' ReportBase '.html']);
 return
 
 

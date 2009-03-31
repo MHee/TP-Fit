@@ -360,7 +360,11 @@ else
 
     delete(hStmp);
 end
-ConvertReport([FileBase '_Report.txt'],'Format','html');
+
+% Report converter depends on external programs and seems to be unstable,
+% Therefore, it is moved to Extras ...
+
+% ConvertReport([FileBase '_Report.txt'],'Format','html');
 
 
 function Extras_Callback(hObject, eventdata, handles)
@@ -374,7 +378,8 @@ Extra=menu('Make a Choice',...
     'Save Window Positions',...
     'Launch Help',...
     'Use k=1 1D APCT model',...
-    'Compute contours (tSft=0s)');
+    'Compute contours (tSft=0s)',...
+    'Convert txt report to HTLM');
 
 
 switch Extra
@@ -433,7 +438,14 @@ switch Extra
         set(handles.TPFit,'UserData',Data);
         UpdateButtonColors(handles);
         Explore_Callback(hObject, eventdata, handles);
-
+    case 11
+        % Convert txt-report to HTML
+        Data=get(handles.TPFit,'UserData');
+        Settings=get(handles.Load,'UserData');
+        [RPath,RBase]=fileparts(Data.ImportInfo.DatFile); % File basename from *.dat
+        RPath=fileparts(Settings.CurrentFile); % Disk location from current open file
+        FileBase=fullfile(RPath,RBase); % Path and basename without extension
+        ConvertReport([FileBase '_Report.txt'],'Format','html');
 end
 
 
