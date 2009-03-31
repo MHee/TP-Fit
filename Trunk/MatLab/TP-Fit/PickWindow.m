@@ -144,11 +144,13 @@ y = ( z(m+1:n+1) - z(1:n-m+1) ) / m;
 
 
 function AfterZoom(hFig,evd)
+% removed because it creates errors ?!
 
-%fprintf('Changed Zoom to [%f %f]; [%f %f]!!!\n',[get(evd.Axes,'XLim') get(evd.Axes,'YLim')]);
-handles.t_axes=evd.Axes;
-handles.figure1=hFig;
-PickWindowPlot(handles);
+% % fprintf('Changed Zoom to [%f %f]; [%f %f]!!!\n',[get(evd.Axes,'XLim') get(evd.Axes,'YLim')]);
+% handles.t_axes=evd.Axes;
+% handles.figure1=hFig;
+% PickWindowPlot(handles);
+
 
 
 function PickWindow_OpeningFcn(hObject, eventdata, handles, varargin)
