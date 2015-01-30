@@ -1,0 +1,11 @@
+#
+# This file defines the list of possible data descriptions that is avaliable
+# selectable within TP-Fit. Make shure this file resides within the same
+# directory as EditMetaDataWindow.m which is a part of TP-Fit.
+#
+None
+Excellent
+Good
+Fair
+Bad
+Failed
