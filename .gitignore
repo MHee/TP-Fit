@@ -1,0 +1,21 @@
+# Windows default autosave extension
+*.asv
+
+# OSX / *nix default autosave extension
+#*.m~
+
+# Ignore token file
+webservices/token.dat
+*.log
+
+# Ignore html documentation...
+**/html/*
+
+# Ignore data directories
+**/TestData/**/*.eps
+**/TestData/**/*_Report.txt
+**/TestData/**/*_ReportSession.mat
+**/TestData/**/*.png
+
+
+MatLab/TP-Fit/UserSettings.mat
