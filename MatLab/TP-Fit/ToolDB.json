@@ -1,0 +1,104 @@
+{
+	"DataTypes": [
+		{
+			"name": "DVTP",
+			"description": "DVTP file \nNewLine"
+		},
+		{
+			"name": "DVTP_raw",
+			"description": "DVTP file"
+		},
+		{
+			"name": "SETP_PROTOTYPE",
+			"description": ""
+		},
+		{
+			"name": "ANTARES",
+			"description": ""
+		},
+		{
+			"name": "ADARA",
+			"description": ""
+		},
+		{
+			"name": "TPFIT_RES",
+			"description": ""
+		},
+		{
+			"name": "SYNTH",
+			"description": ""
+		}
+	],
+	"ToolTypes": [
+		{
+			"name": "DVTP",
+			"description": "Original DVTP tool."
+		},
+		{
+			"name": "SETP",
+			"description": ""
+		},
+		{
+			"name": "SET2",
+			"description": ""
+		},
+		{
+			"name": "APCT-3",
+			"description": ""
+		},
+		{
+			"name": "APCT",
+			"description": ""
+		}
+	],
+	"ModelTypes": [
+		{
+			"name": "APCT_1D_T",
+			"description": "Original DVTP tool 1D-model."
+		},
+		{
+			"name": "APCT_T",
+			"description": ""
+		},
+		{
+			"name": "DVTP_T",
+			"description": ""
+		},
+		{
+			"name": "TeKaNeedle_T",
+			"description": ""
+		}
+	],
+	"ToolSettings": [
+		{
+			"DataType": "DVTP",
+			"ToolID": "_ALL_",
+			"ToolType": "DVTP",
+			"ModelType": "DVTP_T"
+		},
+		{
+			"DataType": "DVTP_raw",
+			"ToolID": "_ALL_",
+			"ToolType": "DVTP",
+			"ModelType": "DVTP_T"
+		},
+		{
+			"DataType": "DVTP_raw",
+			"ToolID": "_ALL_",
+			"ToolType": "DVTP",
+			"ModelType": "DVTP_T"
+		},
+		{
+			"DataType": "SETP_PROTOTYPE",
+			"ToolID": "_ALL_",
+			"ToolType": "DVTP",
+			"ModelType": "DVTP_T"
+		},
+		{
+			"DataType": "ADARA",
+			"ToolID": "_ALL_",
+			"ToolType": "APCT",
+			"ModelType": "APCT_T"
+		}
+	]
+}
