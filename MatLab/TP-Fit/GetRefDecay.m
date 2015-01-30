@@ -107,9 +107,11 @@ end
 
 % Interpolate times, if ts are supplied
 if ~isempty(Opts.ts)
-    RefDat.T=interp1(RefDat.t,RefDat.T,Opts.ts,'cubic',NaN);
+    % RefDat.T=interp1(RefDat.t,RefDat.T,Opts.ts,'cubic',NaN); % "cubic" is discouraged
+    RefDat.T=interp1(RefDat.t,RefDat.T,Opts.ts,'pchip',NaN);
     if use_T2
-        RefDat.T2=interp1(RefDat.t,RefDat.T2,Opts.ts,'cubic',NaN);
+        % RefDat.T2=interp1(RefDat.t,RefDat.T2,Opts.ts,'cubic',NaN); % "cubic" is discouraged
+        RefDat.T2=interp1(RefDat.t,RefDat.T2,Opts.ts,'pchip',NaN);
     end
     RefDat.t=Opts.ts;
 end

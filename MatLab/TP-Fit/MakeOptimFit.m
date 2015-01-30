@@ -29,7 +29,8 @@ else
 end
 
 SDat.t=Data.tr(Data.Picks.UsedDat);
-SDat.T=interp1(RefDat.t+BestSft,RefDat.T,SDat.t,'cubic');
+% SDat.T=interp1(RefDat.t+BestSft,RefDat.T,SDat.t,'cubic'); % "cubic" is discouraged
+SDat.T=interp1(RefDat.t+BestSft,RefDat.T,SDat.t,'pchip');
 Fit=polyfit(SDat.T,Data.T(Data.Picks.UsedDat),1);
 
 InPartFit=[round(2*length(SDat.t)/3):length(SDat.t)];
@@ -46,7 +47,8 @@ Res.tSfts=[MinSft MaxSft];
 
 function NLSqr=Qual(tSft,Data,RefDat)
 SDat.t=Data.tr(Data.Picks.UsedDat);
-SDat.T=interp1(RefDat.t+tSft,RefDat.T,SDat.t,'cubic');
+% SDat.T=interp1(RefDat.t+tSft,RefDat.T,SDat.t,'cubic'); % "cubic" is discouraged
+SDat.T=interp1(RefDat.t+tSft,RefDat.T,SDat.t,'pchip');
 Fit=polyfit(SDat.T,Data.T(Data.Picks.UsedDat),1);
 Diff=Data.T(Data.Picks.UsedDat)-polyval(Fit,SDat.T);
 %StdDev=std(Diff);

@@ -24,7 +24,8 @@ StdDev=zeros(1,N);
 
 for i=1:N
     tSft=tSfts(i);
-    SDat.T(i,:)=interp1(RefDat.t+tSft,RefDat.T,SDat.t,'cubic');
+    % SDat.T(i,:)=interp1(RefDat.t+tSft,RefDat.T,SDat.t,'cubic'); % "cubic" is discouraged
+    SDat.T(i,:)=interp1(RefDat.t+tSft,RefDat.T,SDat.t,'pchip');
     PartFit(i,1:2)=polyfit(SDat.T(i,InPartFit)',Data.T(UsedDat(InPartFit)),1);
     Fit(i,1:2)=polyfit(SDat.T(i,:)',Data.T(UsedDat),1);
     
