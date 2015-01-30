@@ -37,9 +37,11 @@ if exist('ParseFunOpts','var')
     Opts=ParseFunOpts(Opts,varargin);    
     if Opts.Remove
         % Remove TP-Fit from path
-        rmpath(fileparts(which('TPFit_Window.m')));
+        OldTPFitPath=fileparts(which('TPFit.m'));
+        rmpath(OldTPFitPath);
+        rmpath(fullfile(OldTPFitPath,'Libraries','jsonlab'));
         rmpath(fileparts(which('TDataExplorer.m')));
-        rmpath(fileparts(which('TPFit.m')));
+        rmpath(fileparts(which('TPFit_Window.m')));
         return
     end
 elseif ~isempty(varargin)
@@ -62,6 +64,7 @@ function CheckTPFitInstallation
 BasePath=fileparts(mfilename('fullpath'));
 TPFitPath=fullfile(BasePath,'TP-Fit');
 TDataExplorerPath=fullfile(BasePath,'TDataExplorer');
+jsonlabPath=fullfile(BasePath,'Libraries','jsonlab');
 %ModelPath=fullfile(BasePath,'RefModels');
 
 %OldBasePath=fileparts(which('APCT_TModels.mat'))
@@ -79,6 +82,7 @@ end
 % Set Path 
 addpath(BasePath);
 addpath(TPFitPath);
+addpath(jsonlabPath);
 addpath(TDataExplorerPath);
 %addpath(ModelPath);
 
