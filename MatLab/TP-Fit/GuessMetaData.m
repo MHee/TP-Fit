@@ -25,8 +25,11 @@ switch Data.ImportInfo.DataType
         MData.ToolType='SETP';
         MData.ToolID=Data.OrigData.Info.CF2_Serial;
     case 'ANTARES'
-        MData.ToolType='APCT-3';
+        % MData.ToolType='APCT-3';
         MData.ToolID=Data.OrigData.LoggerID;
+        if ~tDB.hasToolSetting('ANTARES','ToolID',MData.ToolID)
+            res=addAntaresToolCfg(tDB,MData.ToolID)
+        end
     case 'ADARA'
         MData.ToolType='APCT';
         MData.ToolID=Data.OrigData.Info.ToolID;
