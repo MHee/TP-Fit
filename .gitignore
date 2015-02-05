@@ -1,17 +1,14 @@
+# .gitignore documentation can be found at
+# http://git-scm.com/docs/gitignore
+
 # Windows default autosave extension
 *.asv
 
 # OSX / *nix default autosave extension
-#*.m~
+*.m~
 
-# Ignore token file
-webservices/token.dat
-*.log
 
-# Ignore html documentation...
-**/html/*
-
-# Ignore data directories
+# Ignore processed example data
 **/TestData/**/*.eps
 **/TestData/**/*_Report.txt
 **/TestData/**/*_ReportSession.mat
@@ -19,3 +16,5 @@ webservices/token.dat
 
 
 MatLab/TP-Fit/UserSettings.mat
+MatLab/Libraries/Testing/
+MatLab/TP-Fit/obsolete/
