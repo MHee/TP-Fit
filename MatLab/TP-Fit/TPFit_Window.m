@@ -57,6 +57,8 @@ function TPFit_Window_OpeningFcn(hObject, eventdata, handles, varargin)
 % Choose default command line output for TPFit_Window
 handles.output = hObject;
 
+handles.verifiedMetadata=false;
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -109,6 +111,7 @@ if (isstruct(Data) && ~isempty(Data))
     Settings.CurrentFile=FileName;
     
     if ~isfield(Data,'Info')
+        handles.verifiedMetadata=false;
         Data=GuessMetaData(Data,'Info',Settings.Info);
         
         [DatPath,DatBaseName]=fileparts(FileName);
@@ -149,6 +152,7 @@ if (isstruct(Data) && ~isempty(Data))
     Settings.DataDir=Data.ImportInfo.DatPath;
     SaveUserSettings(handles,Settings);
     CloseExtWindows(handles);
+    guidata(hObject, handles);
 end
 
 function EditMetaData_Callback(hObject, eventdata, handles)
@@ -178,7 +182,9 @@ set(handles.TPFit,'UserData',Data);
 Settings.Info=Data.Info;
 SaveUserSettings(handles,Settings);
 
+handles.verifiedMetadata=true;
 UpdateButtonColors(handles);
+guidata(hObject, handles);
 
 
 % --- Executes on button press in Pick.
@@ -620,7 +626,7 @@ if isfield(Data,'ImportInfo')
     Colors.Load=green;
 end
 
-if isfield(Data,'Info')
+if isfield(Data,'Info') && handles.verifiedMetadata
     Colors.EditMetaData=green;
 end
 
