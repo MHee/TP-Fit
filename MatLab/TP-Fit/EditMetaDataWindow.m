@@ -78,7 +78,7 @@ if mod(length(varargin),2)
     set(handles.DepthEdit,'String',MData.Depth);
     set(handles.DepthErrEdit,'String',MData.DepthError);
     set(handles.ToolIDEdit,'String',MData.ToolID);
-    set(handles.ToolTypeText,'String',MData.ToolType);
+    set(handles.ToolTypeText,'String',{MData.ToolType});
     set(handles.OperatorEdit,'String',MData.Operator);
     set(handles.kEdit,'String',MData.Initial_k);
     set(handles.rcEdit,'String',MData.Initial_rC);
@@ -156,7 +156,8 @@ MData.CoreType=get(handles.CoreTypeEdit,'String');
 MData.Depth=num2str(str2double(get(handles.DepthEdit,'String')));
 MData.DepthError=get(handles.DepthErrEdit,'String');
 MData.ToolID=get(handles.ToolIDEdit,'String');
-MData.ToolType=get(handles.ToolTypeText,'String');
+ToolTypes=get(handles.ToolTypeText,'String');
+MData.ToolType=ToolTypes{get(handles.ToolTypeText,'Value')};
 MData.Operator=get(handles.OperatorEdit,'String');
 MData.Initial_k=get(handles.kEdit,'String');
 MData.Initial_rC=get(handles.rcEdit,'String');
