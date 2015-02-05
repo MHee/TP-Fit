@@ -1,5 +1,7 @@
 function Data=GuessMetaData(Data,varargin)
 
+tDB=ToolDB();
+
 Opts.Info=GetMetaDataDefaults;
 Opts.GuessFromFileName=false;
 Opts=ParseFunOpts(Opts,varargin);
@@ -42,6 +44,14 @@ switch Data.ImportInfo.DataType
         %Data.Info=MData;
         return
 end
+
+if isempty(MData.ToolID)
+    Setting=tDB.findToolSetting(Data.ImportInfo.DataType);
+else
+    Setting=tDB.findToolSetting(Data.ImportInfo.DataType,'ToolID',MData.ToolID);
+end
+MData.ToolType=Setting.ToolType;
+Data.ModelType=Setting.ModelType;
 
 if Opts.GuessFromFileName
     MData.Site=num2str(sscanf(Data.ImportInfo.DatFile,'%d'));
