@@ -1030,7 +1030,9 @@ end
 % --------------------------------------------------------------------
 function EditMetaData_Callback(hObject, eventdata, handles)
 Data=get(handles.TDataExplorer,'UserData');
-Data.DB(Data.CurrRec).Info=EditMetaData(Data.DB(Data.CurrRec).Info);
+[Data.DB(Data.CurrRec).Info,Data.DB(Data.CurrRec).ModelType]=...
+                  EditMetaData(Data.DB(Data.CurrRec).Info,...
+                                  'ModelType',Data.DB(Data.CurrRec).ModelType);
 set(handles.TDataExplorer,'UserData',Data);
 UpdateWidgets(handles);
 

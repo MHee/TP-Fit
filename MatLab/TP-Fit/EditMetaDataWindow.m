@@ -22,7 +22,7 @@ function varargout = EditMetaDataWindow(varargin)
 
 % Edit the above text to modify the response to help EditMetaDataWindow
 
-% Last Modified by GUIDE v2.5 13-Dec-2007 16:55:18
+% Last Modified by GUIDE v2.5 22-Mar-2015 14:46:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -67,8 +67,13 @@ set(handles.QualitySelector,'String',DescList);
 % Populate Figure
 if mod(length(varargin),2)
     % varargin is uneven (first parameter contains default meta-data)
+    Opts.ModelType='';
+    Opts=ParseFunOpts(Opts,varargin(2:end));
+
     MData=varargin{1};
+    
     handles.MData=MData;
+    handles.ModelType=Opts.ModelType;
     
     set(handles.ExpeditionEdit,'String',MData.Expedition);
     set(handles.SiteEdit,'String',MData.Site);
@@ -82,6 +87,7 @@ if mod(length(varargin),2)
     set(handles.OperatorEdit,'String',MData.Operator);
     set(handles.kEdit,'String',MData.Initial_k);
     set(handles.rcEdit,'String',MData.Initial_rC);
+    set(handles.RefModelText,'String',{Opts.ModelType});
     set(handles.TErrEdit,'String',MData.TError);
     set(handles.CommentEdit,'String',MData.Comment);
     
@@ -161,6 +167,10 @@ MData.ToolType=ToolTypes{get(handles.ToolTypeText,'Value')};
 MData.Operator=get(handles.OperatorEdit,'String');
 MData.Initial_k=get(handles.kEdit,'String');
 MData.Initial_rC=get(handles.rcEdit,'String');
+
+ModelTypes=get(handles.RefModelText,'String');
+handles.ModelType=ModelTypes{get(handles.RefModelText,'Value')};
+
 MData.TError=get(handles.TErrEdit,'String');
 MData.Comment=cellstr(get(handles.CommentEdit,'String'));
 % Make shure no " is in Comment
@@ -542,3 +552,26 @@ end
 
 
 
+
+
+% --- Executes on selection change in RefModelText.
+function RefModelText_Callback(hObject, eventdata, handles)
+% hObject    handle to RefModelText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns RefModelText contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from RefModelText
+
+
+% --- Executes during object creation, after setting all properties.
+function RefModelText_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to RefModelText (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

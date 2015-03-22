@@ -164,13 +164,18 @@ if isempty(Data)
     msgbox('Load data first!!!','','warn');
     return
 end
+if isfield(Data,'ModelType')
+    ModelType=Data.ModelType;
+else
+    ModelType='';
+end
 if isfield(Data,'Info')
     %     if ~isfield(Data.Info,'Core')
     %         Data=GuessMetaData(Data);
     %     end
-    Data.Info=EditMetaData(Data.Info,'DatFileName',DatFileName);
+    [Data.Info,Data.ModelType]=EditMetaData(Data.Info,'DatFileName',DatFileName,'ModelType',ModelType);
 else
-    Data.Info=EditMetaData('DatFileName',DatFileName);
+    [Data.Info,Data.ModelType]=EditMetaData('DatFileName',DatFileName,'ModelType',ModelType);
 end
 
 if isfield(Data,'Picks')

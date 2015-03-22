@@ -1,8 +1,9 @@
-function MData=EditMetaData(varargin)
+function [MData,ModelType]=EditMetaData(varargin)
 % Edit the Meta-Data that is used and stored in TP-Fit data
 
 Opts.GetDefaults=true;
 Opts.DatFileName='';
+Opts.ModelType='';
 [Opts, unusedOpts]=ParseFunOpts(Opts,varargin);
 
 if length(unusedOpts)==1
@@ -17,7 +18,7 @@ end
 % Make sure Meta Data contains all fields that are defined in the defaults
 MData=ParseFunOpts(GetMetaDataDefaults('GetDefaults',Opts.GetDefaults),MData);
 
-hWin=EditMetaDataWindow(MData);
+hWin=EditMetaDataWindow(MData,'ModelType',Opts.ModelType);
 DataOK=false;
 Cancel=false;
 while ~DataOK && ~Cancel
@@ -32,6 +33,7 @@ while ~DataOK && ~Cancel
     end
 end
 MData=handles.MData;
+ModelType=handles.ModelType;
 delete(hWin);
 
 function DataOK=CheckMetaData(MData)
