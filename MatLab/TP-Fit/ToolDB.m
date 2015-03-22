@@ -14,7 +14,12 @@ classdef ToolDB < handle
             self.loadDB;
         end
         function loadDB(self)
-            self.DB=loadjson(self.Opts.DBFile);
+            if exist(self.Opts.DBFile,'file')
+                self.DB=loadjson(self.Opts.DBFile);
+            else
+                fprintf('ToolDB.json does not exist, loading default!\n');
+                self.DB=loadjson([self.Opts.DBFile,'_default']);
+            end
             for table={'DataTypes','ToolTypes','ModelTypes','ToolSettings'}
                 self.DB.(char(table))=cell2mat(self.DB.(char(table)));
             end
