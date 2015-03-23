@@ -1,66 +1,299 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html>
 <html>
-<!-- Mirrored from file://d:/home/martin/TODP/APC3/TP-Fit/doc/UserGuide.html by HTTrack Website Copier/3.x [XR&CO'2007], Tue, 04 Dec 2007 00:13:19 GMT -->
 <head>
+<title>userguide.html</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css">
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
 
+/* RESET
+=============================================================================*/
 
-        <meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252"><title>d:\home\martin\TODP\APC3\TP-Fit\doc\TP-Fit_UserGuide\UserGuide.mm</title>
-        
-        <meta name="GENERATOR" content="OpenOffice.org 2.2  (Win32)">
-        <meta name="AUTHOR" content="Martin Heesemann">
-        <meta name="CREATED" content="20070513;15355715">
-        <meta name="CHANGEDBY" content="Martin Heesemann">
-        <meta name="CHANGED" content="20070513;18091660">
-        <style type="text/css">
-        <!--
-                @page { size: 21cm 29.7cm; margin-left: 3cm; margin-right: 4cm; margin-top: 3cm; margin-bottom: 3cm }
-                H1 { font-family: "Arial"; font-size: 18pt; font-weight:bold}
-                H2 { font-family: "Arial"; font-size: 14pt; font-weight:bold}
-                H3 { font-family: "Arial"; font-size: 12pt; font-weight:bold}
-                H4 { font-family: "Arial"; font-size: 8pt; color: b3b3b3}
-                H5 { font-family: "Arial"; font-size: 8pt; color: b3b3b3}
-                H6 { font-family: "Arial"; font-size: 8pt; color: b3b3b3}
-                P  { text-align:justify}
-                P.LowLevel { text-align:center; font-size: 6pt; color: b3b3b3 }
-                P.messagebox_warning { color: #ff0000 }
-                P.Pencil { color: #ff0000}
-                H2.Martin { font-family: "Arial Unicode MS"; font-size: 14pt}
-                H2.cjk { font-family: "HG Mincho Light J"; font-size: 14pt; font-style: italic }
-                H2.ctl { font-family: "Arial Unicode MS"; font-size: 14pt; font-style: italic }
-                H3.western { font-family: "Albany", sans-serif }
-                H3.cjk { font-family: "HG Mincho Light J" }
-                H3.ctl { font-family: "Arial Unicode MS" }
-                H6.western { font-family: "Albany", sans-serif; font-size: 10pt }
-                H6.cjk { font-family: "HG Mincho Light J"; font-size: 10pt }
-                H6.ctl { font-family: "Arial Unicode MS"; font-size: 10pt }
-                
-                H1.Matlab { font-family: "Arial"; font-size: 14pt; }
-                H2.Matlab { font-family: "Arial"; font-size: 12pt; }
-                pre.codeinput { background: #EEEEEE; padding: 10px; }
-                span.keyword {color: #0000FF}
-                span.comment {color: #228B22}
-                span.string {color: #A020F0}
-                span.untermstring {color: #B20000}
-                span.syscmd {color: #B28C00}
-                pre.codeoutput { color: #666666; padding: 10px; }
-                pre.error { color: red; }
-                p.footer { text-align: right; font-size: xx-small; font-weight: lighter;  font-style: italic; color: gray; }
-                
-                p.bibitem { text-indent: -2em; margin-left: 2em; margin-top:0.6em; margin-bottom:0.6em; }
-                p.noindent { text-indent: 0em }
-        -->
-        </style></head><body dir="ltr" lang="en-US"> 
-<p style="text-align: center;">
-      <font face="Arial" size="5">Title</font>
-    </p>
-  
-<h1>  1. Introduction </h1>
-<p>
-      Reference to figure 1 produced by Heesemann et al. (2007).
-    </p>
-  
-<h1>  2. Foreword </h1>
-<p class="MsoBodyText"> This document describes software to estimate
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* BODY
+=============================================================================*/
+
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+body>*:first-child {
+  margin-top: 0 !important;
+}
+
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* BLOCKS
+=============================================================================*/
+
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+
+/* HEADERS
+=============================================================================*/
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+h5 {
+  font-size: 14px;
+}
+
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+
+/* LINKS
+=============================================================================*/
+
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* LISTS
+=============================================================================*/
+
+ul, ol {
+  padding-left: 30px;
+}
+
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+
+dl {
+  padding: 0;
+}
+
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+
+dl dt:first-child {
+  padding: 0;
+}
+
+dl dt>:first-child {
+  margin-top: 0px;
+}
+
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+
+dl dd>:first-child {
+  margin-top: 0px;
+}
+
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+
+/* CODE
+=============================================================================*/
+
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+
+/* QUOTES
+=============================================================================*/
+
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+
+blockquote>:first-child {
+  margin-top: 0px;
+}
+
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+
+/* HORIZONTAL RULES
+=============================================================================*/
+
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+
+/* TABLES
+=============================================================================*/
+
+table th {
+  font-weight: bold;
+}
+
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+/* IMAGES
+=============================================================================*/
+
+img {
+  max-width: 100%
+}
+</style>
+</head>
+<body>
+<h1>User Guide</h1>
+<h2><em>Foreword</em></h2>
+<p>This document describes software to estimate
 the undisturbed physical state of unconsolidated or semi-consolidated
 sediments measured with penetrating downhole tools. During the DSDP,
 ODP, and IODP programs, many tools were developed and deployed to
@@ -77,73 +310,60 @@ in all programs. The measurements are compared with modeled data (e.g.
 analytical, numerical, or analog models) for which the undisturbed
 state is known ... The fundamental difference between all programs is
 the uses model, which has to take into account the geometry of the used
-probe.<o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText">
-      The aim of this software is to provide a unified basis to process all of the different data types, described above.<o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText"> The initial version of the software is designed
+probe.</p>
+<p>The aim of this software is to provide a unified basis to process all of the different data types, described above.</p>
+<p>The initial version of the software is designed
 to work with data of the APCT tools and was especially developed to
 make use of the enhanced data quality of the APCT-3 tool. Since there
 is no difference in tool geometry between the APCT-3 and earlier
 versions of the APCT, the software is able to handle data from both
 tools. Additionally, it is developed to be easily extended for data
 from other tools. </p>
-  
-<h1>  3. First Steps </h1>
-<p>
-      This section gives an overview of the basic TP-Fit functionallity by guiding through an step-by-step tutorial.
-    </p>
-  
-<h2>  3.1. Launch TP-Fit </h2>
-<p> Run the TPFit.m script in the TP-Fit\MatLab directory within Matlab
-to launch the graphical user interface (GUI).&nbsp;See the section <a href="#1">Installation</a>
+<h2>First Steps</h2>
+<p>This section gives an overview of the basic TP-Fit functionallity by guiding through an step-by-step tutorial.</p>
+<h3>Launch TP-Fit</h3>
+<p>Run the TPFit.m script in the TP-Fit\MatLab directory within Matlab
+to launch the graphical user interface (GUI). See the section <a href="#1">Installation</a>
 Installation for detailed instructions how to install and run TP-Fit. A
 narrow window with some buttons representing the general
-work-flow&nbsp; should pop up. Usually the buttons will be used from
+work-flow should pop up. Usually the buttons will be used from
 top to bottom. </p>
-  
-<p style="text-align: center;"><a href="images/mainmenu.png"><img src="images/mainmenu-2.png" align="middle" border="0" width="156"></a></p>
-<h2>  3.2. Import Data </h2>
-<p> Load some data you want to process (e.g. the APCT-3 file
+<p><img src="images/mainmenu.png" /></p>
+<h3>Import Data</h3>
+<p>Load some data you want to process (e.g. the APCT-3 file
 1329C09H.dat from the test data directory contains some good data!). It
-is possible to import APCT (*.dat), APCT-3 (*.dat) and DVTP (*.eng)
-data. Moreover, saved sessions (*.mat) (see below) can be loaded. The
+is possible to import APCT (<em>.dat), APCT-3 (</em>.dat) and DVTP (<em>.eng)
+data. Moreover, saved sessions (</em>.mat) (see below) can be loaded. The
 first two buttons should turn green, signaling that data was
 successfully imported and some basic Meta-data was created. If you have
 loaded a Session file maybe also the Pick and the Compute contours
 button turn green, depending on the session that was save. </p>
-  
-<p style="text-align: center;"><a href="images/mainmenu_colored.png"><img src="images/mainmenu_colored-2.png" align="middle" border="0" width="156"></a></p>
-<h2>  3.3. Edit Meta Data </h2>
-<p style="text-align: center;"><a href="images/editmetadata.png"><img src="images/editmetadata-2.png" align="middle" border="0" width="183"></a></p>
-<h2>  3.4. Pick Data </h2>
-<p> Now, provide some picks. Zoom into the region of interest (this
+<p><img src="images/mainmenu_colored.png" />]</p>
+<h3>Edit Meta Data</h3>
+<p><img src="images/editmetadata.png" /></p>
+<h3>Pick Data</h3>
+<p>Now, provide some picks. Zoom into the region of interest (this
 region is reused in the result plots, later on!!!) and pick of the tool
 penetration time t0 and. Now, refine the picks in order to the select a
 interval (unshaded region) of good data. The interval should consist of
 as much smooth data as possible, but should not be too close to t0.
 When you are Done, the Pick button should turn green. </p>
-  
-<p style="text-align: center;"><a href="images/pickwindow01.png"><img src="images/pickwindow01-2.png" align="middle" border="0" width="95%"></a></p>
-<p style="text-align: center;"><a href="images/pickwindow02.png"><img src="images/pickwindow02-2.png" align="middle" border="0" width="95%"></a></p>
-<p style="text-align: center;"><a href="images/pickwindow03.png"><img src="images/pickwindow03-2.png" align="middle" border="0" width="95%"></a></p>
-<h2>  3.5. Inspect Fit </h2>
-<p>
-      Show Fit gives a first result with standard sediment physical properties. <b>(A)</b>
+<p><img src="images/pickwindow01.png" />
+<img src="images/pickwindow02.png" />
+<img src="images/pickwindow03.png" /></p>
+<h3>Inspect Fit</h3>
+<p>Show Fit gives a first result with standard sediment physical properties. <strong>(A)</strong> 
 The upper plot shows the measurements (blue dots), the selected data
 unshaded region) and the last third of the selected data (starting at
 diamond). The reference model corresponding to the physical properties
 (shown in lower right plot) is represented by a bold red line and
 extrapolated temperatures (see below) are shown as dashed and dotted
-lines. <b>(B)</b> The second plot shows the difference between data
+lines. <strong>(B)</strong> The second plot shows the difference between data
 and model, and reveals systematic deviations that cannot be recognized
-in the first plot. <b>(C)</b> The lower left panel shows the
+in the first plot. <strong>(C)</strong> The lower left panel shows the
 measurements plotted over the normalized reference model and
 undisturbed temperatures (red circle and black dot on T-axis) are
-extrapolated by linear regression. <b>(D)</b> The lower right panel
+extrapolated by linear regression. <strong>(D)</strong> The lower right panel
 shows the standard deviation (black line with dots) between data and
 model over the time-shift by which the model is shifted versus the
 measured data (see Villinger &amp; ???,??? for explanation of the
@@ -155,109 +375,56 @@ With further clicks into the axes it is possible to inspect the effect
 of different time-shifts (just try!!!). Clicking on the parameter box
 opens a new window where it is possible to change the model parameters
 k and rc. </p>
-  
-<p style="text-align: center;"><a href="images/results01.png"><img src="images/results01-2.png" align="middle" border="0" width="777"></a></p>
-<p style="text-align: center;"><a href="images/changephysprops01.png"><img src="images/changephysprops01-2.png" align="middle" border="0" width="380"></a></p>
-<h2>  3.6. Compute Contours </h2>
-<p> Now, take some time and compute the contour data that is used in
+<p><img src="images/results01.png" /></p>
+<p><img src="images/changephysprops01.png" /></p>
+<h3>Compute Contours</h3>
+<p>Now, take some time and compute the contour data that is used in
 the next step .... If you change the picks of the used data window, the
 contour data should be recalculated, but that is up to you and no
 checks are done!!! </p>
-    
-<p> Explore, once Compute Contours turned green! A mouse click into one
+<p>Explore, once Compute Contours turned green! A mouse click into one
 of the contour plots will move the white dot and the results of the
 corresponding physical properties will be displayed in the results plot
 window. The red star represents the smallest standard deviation. The
 valid physical properties for the result plot are not continuous.
 Values are rounded to the closest tenth of the physical properties! </p>
-  
-<p style="text-align: center;"><a href="images/contourswaitbar.png"><img src="images/contourswaitbar-2.png" align="middle" border="0" width="366"></a></p>
-<p style="text-align: center;"><a href="images/contours01.png"><img src="images/contours01-2.png" align="middle" border="0" width="680"></a></p>
-<p style="text-align: center;"><a href="images/results02.png"><img src="images/results02-2.png" align="middle" border="0" width="777"></a></p>
-<h2>  3.7. Save Results </h2>
-<p> It is possible to save any state of your work in a session file
+<p><img src="images/contourswaitbar.png" />
+<img src="images/contours01.png" />
+<img src="images/results02.png" /></p>
+<h3>Save Results</h3>
+<p>It is possible to save any state of your work in a session file
 (*.mat) and load and resume your work, later on. The session files also
 contain all results that could be collected by a report generator. </p>
-    
-<p> The Make Report creates EPS-files of the current result and contour
+<p>The Make Report creates EPS-files of the current result and contour
 plots in the data directory. Furthermore, a simple ASCII-report is
 generated. </p>
-  
-<h2>  3.8. Advanced Features </h2>
-<p> Extras provides some interesting features and debugging tools,
+<h3>Advanced Features</h3>
+<p>Extras provides some interesting features and debugging tools,
 which can be used at any time. If you moved and resized the figure
 windows it is possible to save the positions. It is also possible to
-export the current data structure to the work-space ìDataî and inspect
+export the current data structure to the work-space ‚ÄúData‚Äù and inspect
 how information is added from step to step, or to make a simple screen
-dump of the data. Be careful if you want to import ìDataî from the
+dump of the data. Be careful if you want to import ‚ÄúData‚Äù from the
 workspace! </p>
-  
-<h1>  4. Installation </h1>
-<p class="MsoBodyText">
-      <a name="1"></a>
-    </p>
-    
-<p class="MsoBodyText"> In order to run TP-Fit a recent version of
-MatlabÆ (e.g. Version 7) is required. The installation is as simple as
+<h2><a name="1"></a> Installation</h2>
+<p>In order to run TP-Fit a recent version of
+Matlab¬Æ (e.g. Version 7) is required. The installation is as simple as
 unpacking the TP-Fit.zip file on your computer. A TP-Fit directory with
-three subdirectories is created. <o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText" style="margin-left: 36pt; text-indent: -18pt;">
-      <font face="Symbol">∑</font><font face="Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>The doc directory contains the sources for this document. <o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText" style="margin-left: 36pt; text-indent: -18pt;">
-      <font face="Symbol">∑</font><font face="Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>The MatLab directory contains all parts that are necessary to run the program<o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText" style="margin-left: 71.45pt; text-indent: -18pt;">
-      <font face="Symbol">∑</font><font face="Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>The TPFit.m, lauched within Matlab, sets some paths and runs the TP-Fit graphical user interface.<o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText" style="margin-left: 71.45pt; text-indent: -18pt;">
-      <font face="Symbol">∑</font><font face="Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>The
-RefModels directory contains numerically computed reference curves
-(e.g. thermal response) for the supported downhole tools (currently
-APCT and DVTP). Further subdirectories contain the FemlabÆ models that
-where used to create the reference curves.<o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText" style="margin-left: 71.45pt; text-indent: -18pt;">
-      <font face="Symbol">∑</font><font face="Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>The TP-Fit directory contains Matlab functions used for the actual data processing.<o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText" style="margin-left: 36pt; text-indent: -18pt;">
-      <font face="Symbol">∑</font><font face="Times New Roman">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font>The TestData directory contains some date files of different down-hole types for testing purposes.<o p="#DEFAULT">
-    </o></p>
-    
-<p class="MsoBodyText">
-      If you have any suggestions or made changes to the documentation, or other files, please let me (<a href="mailto:heesema@uni-bremen.de">heesema@uni-bremen.de</a>) know, so I can include the changes in upcoming releases.
-    </p>
-  
-<h1>  5. Discussion </h1>
-<p class="full-7" style="text-align: left;">
-      <font face="Arial" size="5">Acknowledgments</font>
-    </p>
-  
-<h3 class="western">
-      <a name="x1-1000">
-</a><font face="Arial">References</font>
-    </h3>
-    
-<p class="full-7" style="text-indent: -0.95cm; margin-left: 0.95cm;">
-      Not included
-    </p>
-  
-<p class="full-7">
-      <font face="Arial" size="5"><b>Figures</b></font>
-    </p>
-  
-<p style="text-align: center;"><a href="images/bell.png"><img src="images/bell-2.png" align="middle" border="0" width="16"></a></p>
-<p>
-      Figure&nbsp;1:
-    </p>
-  
-<div type="FOOTER"><p style="margin-top: 0.5cm; margin-bottom: 0cm;" align="center"><sdfield type="PAGE" subtype="RANDOM" format="PAGE">10</sdfield></p></div></body>
-<!-- Mirrored from file://d:/home/martin/TODP/APC3/TP-Fit/doc/UserGuide.html by HTTrack Website Copier/3.x [XR&CO'2007], Tue, 04 Dec 2007 00:13:19 GMT -->
+three subdirectories is created. </p>
+<ol>
+<li>The doc directory contains the sources for this document.</li>
+<li>
+The MatLab directory contains all parts that are necessary to run the program.
+<ul>
+<li>The TPFit.m, lauched within Matlab, sets some paths and runs the TP-Fit graphical user interface</li>
+<li>The RefModels directory contains numerically computed reference curves (e.g. thermal response) for the supported downhole tools (currently APCT and DVTP). Further subdirectories contain the Femlab¬Æ models that where used to create the reference curves.</li>
+<li>The TP-Fit directory contains Matlab functions used for the actual data processing.</li>
+</ul>
+</li>
+<li>The TestData directory contains some date files of different down-hole types for testing purposes.</li>
+</ol>
+<p>If you have any suggestions or made changes to the documentation, or other files, please let me know, so I can include the changes in upcoming releases.</p>
+
+</body>
 </html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
