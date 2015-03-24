@@ -1,3 +1,5 @@
 
+TP-Fit is used to analyze downhole temperature measurements by extrapolation of transient data to undisturbed formation temperatures.
+[TP-Fit Documentation](https://github.com/MHee/TP-Fit/wiki/index.html)
 
-[TP-Fit Documentation](http://htmlpreview.github.io/?https://github.com/MHee/TP-Fit/blob/master/Doc/index.htm)
+http://nbn-resolving.de/urn:nbn:de:gbv:46-diss000111371
