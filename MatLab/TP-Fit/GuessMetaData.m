@@ -28,7 +28,14 @@ switch Data.ImportInfo.DataType
         % MData.ToolType='APCT-3';
         MData.ToolID=Data.OrigData.LoggerID;
         if ~tDB.hasToolSetting('ANTARES','ToolID',MData.ToolID)
-            res=addAntaresToolCfg(tDB,MData.ToolID)
+            res=addAntaresToolCfg(tDB,MData.ToolID);
+            if isempty(res)
+                warndlg({'No data loaded!!!',...
+          'You have to specify a tool type for this type of instrument!',...
+          'If none of the options are appropriate, you have to edit ToolDB.json manually.',...
+          'Make a backup before you do so!'});
+                return
+            end
         end
     case 'ADARA'
         MData.ToolType='APCT';

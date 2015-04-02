@@ -113,7 +113,13 @@ if (isstruct(Data) && ~isempty(Data))
     if ~isfield(Data,'Info')
         handles.verifiedMetadata=false;
         Data=GuessMetaData(Data,'Info',Settings.Info);
-        
+        if ~isfield(Data,'Info')
+            warning('Something went wrong, no data loaded!');
+            Data=struct();
+            set(handles.TPFit,'UserData',Data);
+            UpdateButtonColors(handles);
+            return
+        end
         [DatPath,DatBaseName]=fileparts(FileName);
         MetaFile=fullfile(DatPath,[DatBaseName '.meta']);
         if exist(MetaFile,'file')
@@ -157,6 +163,12 @@ end
 
 function EditMetaData_Callback(hObject, eventdata, handles)
 Data=get(handles.TPFit,'UserData');
+if ~isfield(Data,'ImportInfo')
+    warndlg('You have to load data first!!!');
+    return
+end
+
+    
 Settings=get(handles.Load,'UserData');
 [Dummy,DatFileName]=fileparts(Settings.CurrentFile);
 
@@ -198,6 +210,11 @@ function Pick_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 Data=get(handles.TPFit,'UserData');
+if ~isfield(Data,'Info') || ~handles.verifiedMetadata
+    warndlg('You have to enter meta-data first!!!');
+    return
+end
+
 Data=GetPicks(Data);
 
 % Make sure no old results are used!!!

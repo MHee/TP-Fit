@@ -36,6 +36,12 @@ end
 
 h=PickWindow('UserData',Data);
 uiwait(h);
-Data=get(h,'UserData');
-close(h);
+try
+    Data=get(h,'UserData');
+    close(h);
+catch
+    warndlg({'Something went wrong during picking!',...
+        'Try again and make sure you save the picks before you close the dialog!'});
+end
+
 
