@@ -23,7 +23,13 @@ if ishandle(hResults)
     UDat.hResults=hResults;
     UDat.hTPFit=Opts.hTPFit;
     set(gcf,'UserData',UDat);
-    set(gcf,'Pointer','fullcrosshair');
+    if datenum(version('-date'))< 735857
+        % Matlab before R2014b --> fullcrosshair supported
+        set(gcf,'Pointer','fullcrosshair');
+    else
+        % Matlab R2014b or newer --> fullcrosshair NOT supported
+        set(gcf,'Pointer','crosshair');
+    end
     [Res,Data]=MakeFit(UDat.Data,Opts.k,Opts.rc);
     hFig=gcf;
     figure(hResults);
