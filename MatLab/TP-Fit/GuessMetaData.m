@@ -24,6 +24,9 @@ switch Data.ImportInfo.DataType
     case 'SETP_PROTOTYPE'
         MData.ToolType='SETP';
         MData.ToolID=Data.OrigData.Info.CF2_Serial;
+    case 'SET_PROTOTYPE'
+        MData.ToolType='SET';
+        MData.ToolID=Data.OrigData.Info.CF2_Serial;
     case 'ANTARES'
         % MData.ToolType='APCT-3';
         MData.ToolID=Data.OrigData.LoggerID;

@@ -27,6 +27,10 @@
 		{
 			"name": "SYNTH",
 			"description": ""
+		},
+		{
+			"name": "QBASIC_NEEDLE",
+			"description": ""
 		}
 	],
 	"ToolTypes": [
@@ -48,6 +52,10 @@
 		},
 		{
 			"name": "APCT",
+			"description": ""
+		},
+		{
+			"name": "TeKaNeedleProbe",
 			"description": ""
 		}
 	],
@@ -91,7 +99,13 @@
 		{
 			"DataType": "SETP_PROTOTYPE",
 			"ToolID": "_ALL_",
-			"ToolType": "DVTP",
+			"ToolType": "SETP",
+			"ModelType": "DVTP_T"
+		},
+        {
+			"DataType": "SET_PROTOTYPE",
+			"ToolID": "_ALL_",
+			"ToolType": "SET",
 			"ModelType": "DVTP_T"
 		},
 		{
@@ -99,6 +113,12 @@
 			"ToolID": "_ALL_",
 			"ToolType": "APCT",
 			"ModelType": "APCT_T"
+		},
+		{
+			"DataType": "QBASIC_NEEDLE",
+			"ToolID": "_ALL_",
+			"ToolType": "TeKaNeedleProbe",
+			"ModelType": "TeKaNeedle_T"
 		}
 	]
 }

@@ -1,4 +1,4 @@
-function Data=ImportNeedleData(FileName)
+function Data=ImportNeedleData(FileName,varargin)
 
 DoPlot=1;
 [fid,Message]=fopen(FileName,'r');

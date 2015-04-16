@@ -110,7 +110,8 @@ Event.NScans=ExtractLineData(fid,'Number Scans:','EditFile',FileName);
 
 % Read data block of event
 fgetl(fid);
-T=textscan(fid,'%*d, %f',Event.NScans);
+%str2num(Event.NScans)
+T=textscan(fid,'%*d, %f',str2double(Event.NScans));
 T=T{1};
 T=T(:);
 t=(1:length(T))'*Event.Sampling;

@@ -28,7 +28,7 @@ end
 
 % Get the FileName
 if ~exist('FileName','var')
-    [DatFile,DatPath]=uigetfile({'*.dat;*.eng;*.mat;*.new;*.npm;*.fit';'*.dat';'*.eng';'*.mat'},'Select Data or Session File',Opts.StartDir);
+    [DatFile,DatPath]=uigetfile({'*.dat;*.eng;*.mat;*.new;*.npm;*.fit;*.txt';'*.dat';'*.eng';'*.mat'},'Select Data or Session File',Opts.StartDir);
     FileName=fullfile(DatPath, DatFile);
 else
     [DatPath,DatFile,ext] = fileparts(FileName);
@@ -130,6 +130,10 @@ switch upper(FileType)
         OrigData=ImportNewDVTPPData(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.T;
         Data.t=OrigData.t;
+        if all(~isfinite(OrigData.P))
+            fprintf('No pressure data, assuming instrument is SET prototype.\n');
+            FileType='SET_PROTOTYPE';
+        end
     case {'QBASIC_NEEDLE'}
         OrigData=ImportNeedleData(FileName,'DoPlot',Opts.DoPlot);
         Data.T=OrigData.T;
